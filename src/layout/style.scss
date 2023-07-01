@@ -1,0 +1,19 @@
+.container-fluid{
+  background-image: url('../assets/sheep.jpg');
+  background-size: cover;
+  height: 100vh;
+  overflow:scroll;
+
+  .logout{
+    cursor: pointer;
+    color:#A43855;
+  }
+
+  .logout:hover{
+    border:1px solid black;
+  }
+
+}
+// .overflow{
+//   overflow: scroll;
+// }
