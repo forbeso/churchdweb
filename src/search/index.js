@@ -207,7 +207,7 @@ function Search() {
     async function getAllMembers() {
       setIsLoading(true);
       const { data: membervis, error } = await supabase
-        .from('membervis_real')
+        .from('membervis_dummy')
         .select('*');
       setIsLoading(false);
       setMemberData(membervis);
@@ -359,7 +359,7 @@ function Search() {
       );
       if (!isDuplicate) {
         const { data, error } = await supabase
-          .from('membervis_real')
+          .from('membervis_dummy')
           .insert([
             {
               member_id: memberId,
@@ -478,7 +478,7 @@ function Search() {
 
   const handleConfirmUpdate = async () => {
     const { data, error } = await supabase
-      .from('membervis_real')
+      .from('membervis_dummy')
       .update(selectedMember)
       .match({ member_id: selectedMember.member_id });
 
@@ -516,7 +516,7 @@ function Search() {
 
   const handleDelete = async () => {
     const { data, error } = await supabase
-      .from('membervis_real')
+      .from('membervis_dummy')
       .delete()
       .eq('id', 'df22e057-56ba-4ed8-86a1-df89c79ea9c4');
   };
