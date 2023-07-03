@@ -13,7 +13,7 @@ function Nav() {
   return (
     <div className="topnav">
       <div className="mt-4 mb-5 bold logo d-flex">
-        <i className="material-icons-round d-flex  align-items-center text-white">
+        <i className="material-icons-round d-flex align-items-center text-white">
           church{' '}
         </i>{' '}
         ChurchDeck{' '}
@@ -25,13 +25,13 @@ function Nav() {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'nav-link d-flex  align-items-center link setActive'
-                  : 'nav-link d-flex  align-items-center link'
+                  ? 'nav-link d-flex align-items-center link setActive'
+                  : 'nav-link d-flex align-items-center link'
               }
               to="/cdeck/home"
               style={listStyle}
             >
-              <i className="material-icons-round d-flex  align-items-center">
+              <i className="material-icons-round d-flex align-items-center">
                 home{' '}
               </i>{' '}
               Home
@@ -41,13 +41,13 @@ function Nav() {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'nav-link d-flex  align-items-center link setActive'
-                  : 'nav-link d-flex  align-items-center link'
+                  ? 'nav-link d-flex align-items-center link setActive'
+                  : 'nav-link d-flex align-items-center link'
               }
               to="/cdeck/search"
               style={listStyle}
             >
-              <i className="material-icons-round d-flex  align-items-center">
+              <i className="material-icons-round d-flex align-items-center">
                 search{' '}
               </i>{' '}
               Search
@@ -59,12 +59,12 @@ function Nav() {
               to="/cdeck/dashboard"
               className={({ isActive }) =>
                 isActive
-                  ? 'nav-link d-flex  align-items-center link setActive'
-                  : 'nav-link d-flex  align-items-center link'
+                  ? 'nav-link d-flex align-items-center link setActive'
+                  : 'nav-link d-flex align-items-center link'
               }
               style={listStyle}
             >
-              <i className="material-icons-outlined d-flex  align-items-center">
+              <i className="material-icons-outlined d-flex align-items-center">
                 stacked_bar_chart{' '}
               </i>{' '}
               Dashboard
@@ -76,12 +76,12 @@ function Nav() {
               to="/cdeck/sermon"
               className={({ isActive }) =>
                 isActive
-                  ? 'nav-link d-flex  align-items-center link setActive'
-                  : 'nav-link d-flex  align-items-center link'
+                  ? 'nav-link d-flex align-items-center link setActive'
+                  : 'nav-link d-flex align-items-center link'
               }
               style={listStyle}
             >
-              <i className="material-icons-outlined d-flex  align-items-center">
+              <i className="material-icons-outlined d-flex align-items-center">
                 speaker_notes{' '}
               </i>{' '}
               Tithes
@@ -93,12 +93,12 @@ function Nav() {
               to="/cdeck/activities"
               className={({ isActive }) =>
                 isActive
-                  ? 'nav-link d-flex  align-items-center link setActive'
-                  : 'nav-link d-flex  align-items-center link'
+                  ? 'nav-link d-flex align-items-center link setActive'
+                  : 'nav-link d-flex align-items-center link'
               }
               style={listStyle}
             >
-              <i className="material-icons-outlined d-flex  align-items-center">
+              <i className="material-icons-outlined d-flex align-items-center">
                 pool{' '}
               </i>{' '}
               Activities
@@ -110,12 +110,12 @@ function Nav() {
               to="/cdeck/churchinfo"
               className={({ isActive }) =>
                 isActive
-                  ? 'nav-link d-flex  align-items-center link setActive'
-                  : 'nav-link d-flex  align-items-center link'
+                  ? 'nav-link d-flex align-items-center link setActive'
+                  : 'nav-link d-flex align-items-center link'
               }
               style={listStyle}
             >
-              <i className="material-icons-outlined d-flex  align-items-center">
+              <i className="material-icons-outlined d-flex align-items-center">
                 church{' '}
               </i>{' '}
               My Church

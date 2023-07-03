@@ -558,7 +558,7 @@ function Search() {
       </div>
 
       <div
-        className="d-flex flex-row justify-content-around mb-2 pillFilters"
+        className="d-flex flex-row flex-wrap justify-content-around mb-2 pillFilters"
         style={{ height: 70 }}
       >
         <button
