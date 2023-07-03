@@ -20,7 +20,7 @@ function Home() {
 
           <p className="mb-4">Unify, Organize, and Empower Your Flock! ✞🐑🐑</p>
           <Link
-            className="btn btn-warning d-block w-50 w-md-25 mb-3 mb-md-0"
+            className="btn btn-warning d-block w-sm-50 w-md-25 mb-3 mb-md-0"
             to="/cdeck/search"
           >
             See Your Flock
@@ -35,7 +35,7 @@ function Home() {
           />
         </div>
       </div>
-      <div className="card-section d-flex animate__animated animate__fadeInUp">
+      <div className="card-section d-flex flex-column flex-wrap animate__animated animate__fadeInUp">
         <div className="card p-2 m-2">
           <div className="card-icon">
             <span className="material-icons-outlined text-danger">search</span>
