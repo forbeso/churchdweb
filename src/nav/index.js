@@ -14,9 +14,9 @@ function Nav() {
     <div className="topnav">
       <div className="mt-4 mb-5 bold logo d-flex">
         <i className="material-icons-round d-flex align-items-center text-white">
-          church{' '}
-        </i>{' '}
-        ChurchDeck{' '}
+          church
+        </i>
+        ChurchDeck
       </div>
 
       <div>
@@ -32,8 +32,8 @@ function Nav() {
               style={listStyle}
             >
               <i className="material-icons-round d-flex align-items-center">
-                home{' '}
-              </i>{' '}
+                home
+              </i>
               Home
             </NavLink>
           </li>
@@ -48,8 +48,8 @@ function Nav() {
               style={listStyle}
             >
               <i className="material-icons-round d-flex align-items-center">
-                search{' '}
-              </i>{' '}
+                search
+              </i>
               Search
             </NavLink>
           </li>
@@ -65,8 +65,8 @@ function Nav() {
               style={listStyle}
             >
               <i className="material-icons-outlined d-flex align-items-center">
-                stacked_bar_chart{' '}
-              </i>{' '}
+                stacked_bar_chart
+              </i>
               Dashboard
             </NavLink>
           </li>
@@ -82,8 +82,8 @@ function Nav() {
               style={listStyle}
             >
               <i className="material-icons-outlined d-flex align-items-center">
-                speaker_notes{' '}
-              </i>{' '}
+                speaker_notes
+              </i>
               Tithes
             </NavLink>
           </li>
@@ -99,8 +99,8 @@ function Nav() {
               style={listStyle}
             >
               <i className="material-icons-outlined d-flex align-items-center">
-                pool{' '}
-              </i>{' '}
+                pool
+              </i>
               Activities
             </NavLink>
           </li>
@@ -116,19 +116,13 @@ function Nav() {
               style={listStyle}
             >
               <i className="material-icons-outlined d-flex align-items-center">
-                church{' '}
-              </i>{' '}
+                church
+              </i>
               My Church
             </NavLink>
           </li>
         </ul>
       </div>
-
-      {/* <div className="d-flex justify-content-center  nav-bottom-box-container p-3 h-25">
-        <div className="d-flex justify-content-center align-items-center box w-100 p-2">
-          <h6>Go Pro</h6>
-        </div>
-      </div> */}
     </div>
   );
 }
