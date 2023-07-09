@@ -193,6 +193,7 @@ function Search() {
   const [duplicateError, setDuplicateError] = useState('');
   const [confirmError, setConfirmError] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState('');
+  const [minsitryList, setMinistryList] = useState([])
 
   const [loggedIn, setLoggedin] = useState(false);
   useEffect(() => {
@@ -212,7 +213,19 @@ function Search() {
       setIsLoading(false);
       setMemberData(membervis);
     }
+
     getAllMembers();
+    
+    async function getMinistries(){
+        const {data: ministry, error} = await supabase
+        .from('ministry')
+        .select('name');
+        setMinistryList(ministry);
+    }
+    
+    getMinistries();
+
+
   }, [navigate, session, session?.user]);
 
   const noteStrip = (note) => {
@@ -760,19 +773,27 @@ function Search() {
                     <small></small>
                   </span>
                 </label>
-                <input
-                  type="text"
-                  maxLength={30}
+                
+                <select
                   className="form-control"
+                  required
                   id="ministry"
                   name="ministry"
-                  placeholder=""
                   value={ministry}
-                  onChange={(query) => {
-                    setMinistry(query.target.value);
+                  onChange={(e) => {
+                    setMinistry(e.target.value);
                     setMinistryError(false);
-                  }}
-                />
+                }}
+                 >
+                <option value="">Select Ministry</option>
+                {minsitryList.map((ministry, index) => (
+                  <option key={index} value={ministry.name}>
+                    {ministry.name}
+                  </option>
+                ))}
+              </select>
+
+
               </div>
               <div className="form-group">
                 <label htmlFor="sex">Sex *</label>
