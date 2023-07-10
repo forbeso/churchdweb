@@ -201,123 +201,133 @@ function Data() {
   // Render the line graph
 
   return (
-    <div className="d-flex flex-wrap justify-content-between animate__animated animate__fadeIn mb-2">
-      <div className="bg-white p-3 chart-container col-12 col-md-6 col-lg-4">
-        <h6 className="">Quick Metrics</h6>
-        <p className="mb-4">
-          <small>Member Summary</small>
-        </p>
-        <div className="d-flex justify-content-between">
-          <div className="metrics p-2 bg-members">
-            <div className="card-icon icon-circle circle-member d-flex align-items-center justify-content-center">
-              <span className="material-icons-outlined text-white">
-                diversity_3
-              </span>
+    <>
+      <div>
+        <h1>Welcome to Your Dashboard</h1>
+        <p>Get insights and manage your church activities with ease.</p>
+      </div>
+      <div className="d-flex flex-wrap justify-content-between animate__animated animate__fadeIn mb-2">
+        <div className="bg-white p-3 chart-container col-12 col-md-6 col-lg-4">
+          <h6 className="">Quick Metrics</h6>
+          <p className="mb-4">
+            <small>Member Summary</small>
+          </p>
+          <div className="d-flex justify-content-between">
+            <div className="metrics p-2 bg-members">
+              <div className="card-icon icon-circle circle-member d-flex align-items-center justify-content-center">
+                <span className="material-icons-outlined text-white">
+                  diversity_3
+                </span>
+              </div>
+              <strong>
+                {isLoading ? (
+                  <Loader />
+                ) : (
+                  <h3 className="display-5">{memberCount}</h3>
+                )}
+              </strong>
+              <p>Members</p>
             </div>
-            <strong>
-              {isLoading ? (
-                <Loader />
-              ) : (
-                <h3 className="display-5">{memberCount}</h3>
-              )}
-            </strong>
-            <p>Members</p>
+
+            <div className="metrics  p-2 bg-visitors">
+              <div className="card-icon icon-circle circle-visitor d-flex align-items-center justify-content-center">
+                <span className="material-icons-outlined text-white">
+                  diversity_3
+                </span>
+              </div>
+              <strong>
+                {isLoading ? <Loader /> : <h3>{visitorCount}</h3>}
+              </strong>
+              <p>Visitors</p>
+            </div>
+
+            <div className="metrics  p-2 bg-active">
+              <div className="card-icon icon-circle circle-active d-flex align-items-center justify-content-center">
+                <span className="material-icons-outlined text-white">star</span>
+              </div>
+              <strong>{isLoading ? <Loader /> : <h3>{activeCount}</h3>}</strong>
+              <p>Active</p>
+            </div>
+
+            <div className="metrics  p-2 bg-inactive">
+              <div className="card-icon icon-circle circle-inactive d-flex align-items-center justify-content-center">
+                <span className="material-icons-outlined text-white">
+                  person_off
+                </span>
+              </div>
+              <strong>
+                {isLoading ? <Loader /> : <h3>{inactiveCount}</h3>}
+              </strong>
+              <p>Inactive</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-3 chart-container-second col-12 col-md-6 col-lg-4">
+          <div>
+            <h6>Visitor Insights</h6>
+          </div>
+          <div>
+            <h6>Target vs Reality</h6>
           </div>
 
-          <div className="metrics  p-2 bg-visitors">
-            <div className="card-icon icon-circle circle-visitor d-flex align-items-center justify-content-center">
-              <span className="material-icons-outlined text-white">
-                diversity_3
-              </span>
-            </div>
-            <strong>{isLoading ? <Loader /> : <h3>{visitorCount}</h3>}</strong>
-            <p>Visitors</p>
-          </div>
+          <p className="mb-4">
+            <small>Target vs Total Visitors</small>
+          </p>
 
-          <div className="metrics  p-2 bg-active">
-            <div className="card-icon icon-circle circle-active d-flex align-items-center justify-content-center">
-              <span className="material-icons-outlined text-white">star</span>
-            </div>
-            <strong>{isLoading ? <Loader /> : <h3>{activeCount}</h3>}</strong>
-            <p>Active</p>
-          </div>
-
-          <div className="metrics  p-2 bg-inactive">
-            <div className="card-icon icon-circle circle-inactive d-flex align-items-center justify-content-center">
-              <span className="material-icons-outlined text-white">
-                person_off
-              </span>
-            </div>
-            <strong>{isLoading ? <Loader /> : <h3>{inactiveCount}</h3>}</strong>
-            <p>Inactive</p>
+          <div>
+            <Bar data={barChartData} />
           </div>
         </div>
-      </div>
 
-      <div className="bg-white p-3 chart-container-second col-12 col-md-6 col-lg-4">
-        <div>
-          <h6>Visitor Insights</h6>
-        </div>
-        <div>
-          <h6>Target vs Reality</h6>
-        </div>
+        <div className="bg-white p-3 chart-container w-100 col-12 col-lg-6">
+          <div>
+            <h6>Attendance Insights</h6>
+          </div>
 
-        <p className="mb-4">
-          <small>Target vs Total Visitors</small>
-        </p>
+          <div>
+            <small>Sunday Service</small>
+          </div>
 
-        <div>
-          <Bar data={barChartData} />
-        </div>
-      </div>
-
-      <div className="bg-white p-3 chart-container w-100 col-12 col-lg-6">
-        <div>
-          <h6>Attendance Insights</h6>
-        </div>
-
-        <div>
-          <small>Sunday Service</small>
+          <div>
+            <Line
+              data={{
+                datasets: [
+                  {
+                    label: 'Attendance',
+                    data: attendanceData,
+                    borderColor: 'rgb(119,87,254)', // Specify the desired color
+                  },
+                ],
+              }}
+              options={options}
+            />
+          </div>
         </div>
 
-        <div>
-          <Line
-            data={{
-              datasets: [
-                {
-                  label: 'Attendance',
-                  data: attendanceData,
-                  borderColor: 'rgb(119,87,254)', // Specify the desired color
-                },
-              ],
-            }}
-            options={options}
-          />
-        </div>
-      </div>
+        <div className="bg-white p-3 w-100 col-12 col-lg-6 target-reality">
+          <div>
+            <h6>Target vs Reality</h6>
+          </div>
 
-      <div className="bg-white p-3 w-100 col-12 col-lg-6 target-reality">
-        <div>
-          <h6>Target vs Reality</h6>
+          <p className="mb-4">
+            <small>Target vs Total Visitors</small>
+          </p>
+
+          <div>
+            <Bar data={barChartData} />
+          </div>
         </div>
 
-        <p className="mb-4">
-          <small>Target vs Total Visitors</small>
-        </p>
+        <div className="bg-white p-3 target-reality col-12 col-lg-6">
+          {/* Content */}
+        </div>
 
-        <div>
-          <Bar data={barChartData} />
+        <div className="bg-white p-3 chart-container-second col-12">
+          {/* Content */}
         </div>
       </div>
-
-      <div className="bg-white p-3 target-reality col-12 col-lg-6">
-        {/* Content */}
-      </div>
-
-      <div className="bg-white p-3 chart-container-second col-12">
-        {/* Content */}
-      </div>
-    </div>
+    </>
   );
 }
 

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useContext, ChangeEvent } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -164,7 +163,7 @@ function Search() {
   const [insuranceNumber, setInsuranceNumber] = useState('');
   const [type, setType] = useState('');
 
-// const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const [uploadedFilePath, setUploadedFilePath] = useState('');
   const [changedFields, setChangedFields] = useState([]);
   const [showMemberInfoDialog, setShowMemberInfoDialog] = useState(false);
@@ -193,7 +192,7 @@ function Search() {
   const [duplicateError, setDuplicateError] = useState('');
   const [confirmError, setConfirmError] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState('');
-  const [minsitryList, setMinistryList] = useState([])
+  const [minsitryList, setMinistryList] = useState([]);
 
   const [loggedIn, setLoggedin] = useState(false);
   useEffect(() => {
@@ -215,17 +214,15 @@ function Search() {
     }
 
     getAllMembers();
-    
-    async function getMinistries(){
-        const {data: ministry, error} = await supabase
+
+    async function getMinistries() {
+      const { data: ministry, error } = await supabase
         .from('ministry')
         .select('name');
-        setMinistryList(ministry);
+      setMinistryList(ministry);
     }
-    
+
     getMinistries();
-
-
   }, [navigate, session, session?.user]);
 
   const noteStrip = (note) => {
@@ -553,7 +550,8 @@ function Search() {
   return (
     <>
       <div>
-        <h3>Browse your Flock</h3>
+        <h1>Search Members</h1>
+        <p>Find and access information about church members quickly.</p>
       </div>
       <div className="input-group mb-3 mt-5 searchInputGroup">
         <input
@@ -773,7 +771,7 @@ function Search() {
                     <small></small>
                   </span>
                 </label>
-                
+
                 <select
                   className="form-control"
                   required
@@ -783,18 +781,16 @@ function Search() {
                   onChange={(e) => {
                     setMinistry(e.target.value);
                     setMinistryError(false);
-                }}
-                 >
-                <option value="">Select Ministry</option>
-                {minsitryList && minsitryList.map((ministry, index) => (
-                  <option key={index} value={ministry.name}>
-                    {ministry.name}
-                  </option>
-                ))}
-              </select>
-              
-
-
+                  }}
+                >
+                  <option value="">Select Ministry</option>
+                  {minsitryList &&
+                    minsitryList.map((ministry, index) => (
+                      <option key={index} value={ministry.name}>
+                        {ministry.name}
+                      </option>
+                    ))}
+                </select>
               </div>
               <div className="form-group">
                 <label htmlFor="sex">Sex *</label>

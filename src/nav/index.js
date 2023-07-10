@@ -9,14 +9,10 @@ const listStyle = {
   textDecoration: 'none',
 };
 
-const Nav = ({isNavOpen})=> {
-  return ( 
-  
+const Nav = ({ isNavOpen }) => {
+  return (
     <div className="topnav">
-      <div className="mt-4 mb-5 bold logo d-flex">
-       
-        ChurchDeck
-      </div>
+      <div className="mt-4 mb-5 bold logo">ChurchDeck</div>
 
       <div>
         <ul className="nav flex-column">
@@ -124,6 +120,6 @@ const Nav = ({isNavOpen})=> {
       </div>
     </div>
   );
-}
+};
 
 export default Nav;
