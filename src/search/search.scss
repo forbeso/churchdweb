@@ -202,3 +202,18 @@
 
 }
 
+// Add this CSS code to your component's SCSS file
+
+@media (max-width: 576px) {
+  .modal-dialog {
+    max-width: 90%;
+    margin: 1rem auto;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 992px) {
+  .modal-dialog {
+    max-width: 70%;
+    margin: 1rem auto;
+  }
+}
