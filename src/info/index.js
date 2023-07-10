@@ -12,7 +12,7 @@ function Info() {
 
   return (
     <>
-      <div className="text-align-center">
+      <div className="text-center">
         <h1>Church Information</h1>
         <p>Manage and update church details and important information.</p>
       </div>
