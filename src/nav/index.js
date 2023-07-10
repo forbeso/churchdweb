@@ -9,13 +9,12 @@ const listStyle = {
   textDecoration: 'none',
 };
 
-function Nav() {
-  return (
+const Nav = ({isNavOpen})=> {
+  return ( 
+  
     <div className="topnav">
       <div className="mt-4 mb-5 bold logo d-flex">
-        <i className="material-icons-round d-flex align-items-center text-white">
-          church
-        </i>
+       
         ChurchDeck
       </div>
 
@@ -73,7 +72,7 @@ function Nav() {
 
           <li className="nav-item">
             <NavLink
-              to="/cdeck/sermon"
+              to="/cdeck/tithes"
               className={({ isActive }) =>
                 isActive
                   ? 'nav-link d-flex align-items-center link setActive'

@@ -572,7 +572,7 @@ function Search() {
 
       <div
         className="d-flex flex-row flex-wrap justify-content-around mb-2 pillFilters"
-        style={{ height: 70 }}
+        style={{ height: 110 }}
       >
         <button
           className={
@@ -786,12 +786,13 @@ function Search() {
                 }}
                  >
                 <option value="">Select Ministry</option>
-                {minsitryList.map((ministry, index) => (
+                {minsitryList && minsitryList.map((ministry, index) => (
                   <option key={index} value={ministry.name}>
                     {ministry.name}
                   </option>
                 ))}
               </select>
+              
 
 
               </div>

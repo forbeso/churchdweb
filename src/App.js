@@ -12,7 +12,7 @@ import Layout from './layout/index';
 import Info from './info/index';
 import { SupabaseProvider } from './SupabaseContext';
 import Activities from './activities';
-import Sermon from './sermon';
+import TithesPage from './tithes';
 
 function NoInternetScreen() {
   return (
@@ -63,7 +63,7 @@ export default function App() {
             <Route path="/cdeck/dashboard" element={<Data />} />
             <Route path="/cdeck/home" element={<Home />} />
             <Route path="/cdeck/activities" element={<Activities />} />
-            <Route path="/cdeck/sermon" element={<Sermon />} />
+            <Route path="/cdeck/tithes" element={<TithesPage />} />
           </Route>
         </Routes>
       </SupabaseProvider>

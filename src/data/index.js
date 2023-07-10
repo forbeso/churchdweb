@@ -320,25 +320,6 @@ function Data() {
           </div>
         </div>
 
-        <div className="bg-white  p-3 chart-container-second">
-          <div>
-            <h6>Visitor Insights</h6>
-          </div>
-
-          <div>
-            <Bar data={barChartData} />
-          </div>
-        </div>
-
-        <div className="bg-white  p-3 chart-container-second">
-          <div>
-            <h6>Visitor Insights</h6>
-          </div>
-
-          <div>
-            <Bar data={barChartData} />
-          </div>
-        </div>
       </div>
 
       <ChatButton />
