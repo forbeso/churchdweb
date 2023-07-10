@@ -14,14 +14,15 @@ import { ReactComponent as Image } from '../assets/working.svg';
 function Activities() {
   return (
    <div className=''>
-<div>
+    <div>
       <h1 className="text-center">Under Construction</h1>
       <p className="text-center">We're sorry, but this page is currently under construction. Please check back later for updates.</p>
-    </div>    <div className="image-container">
+    </div>    
+    <div className="image-container">
       <Image className="image" />
-      </div>
+    </div>
       
-   </div>
+    </div>
   );
 }
 

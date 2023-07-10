@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Table } from 'react-bootstrap';
+
+import { ReactComponent as Image } from '../assets/working.svg';
 import './style.scss';
 
 const TithesPage = () => {
@@ -26,6 +28,19 @@ const TithesPage = () => {
     setMemberName('');
     setAmount('');
   };
+
+  return(
+    <div className=''>
+    <div>
+      <h1 className="text-center">Under Construction</h1>
+      <p className="text-center">We're sorry, but this page is currently under construction. Please check back later for updates.</p>
+    </div>    
+    <div className="image-container">
+      <Image className="image" />
+    </div>
+      
+    </div>
+  )
 
   return (
     <div className="tithes-page-container animate__animated animate__fadeIn">
