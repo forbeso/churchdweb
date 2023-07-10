@@ -209,10 +209,19 @@
     max-width: 90%;
     margin: 1rem auto;
   }
+
+  .extendedBox {
+    max-width: 90%;
+    margin: 1rem auto;
+  }
 }
 
 @media (min-width: 577px) and (max-width: 992px) {
   .modal-dialog {
+    max-width: 70%;
+    margin: 1rem auto;
+  }
+   .extendedBox {
     max-width: 70%;
     margin: 1rem auto;
   }
