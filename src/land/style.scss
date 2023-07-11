@@ -13,3 +13,24 @@
     flex-direction: column;
   }
 }
+
+.gif-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.gif-image {
+  max-width: 100%; /* Set the maximum width for responsiveness */
+  height: auto;
+}
+p {
+  font-size: 16px;
+  color: #666;
+  margin-top: 10px;
+}
+
+.card-more-info {
+  margin-top: 20px;
+}

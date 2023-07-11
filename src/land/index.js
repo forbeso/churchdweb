@@ -5,6 +5,7 @@ import supabase from '../supabase';
 import { Link } from 'react-router-dom';
 import { SupabaseContext } from '../SupabaseContext';
 import viewmem from '../assets/viewyellow.png';
+import searchGIF from '../assets/searchGIF.gif';
 import './style.scss';
 
 function Home() {
@@ -35,75 +36,101 @@ function Home() {
           />
         </div>
       </div>
- <div className="card-section d-flex flex-column flex-wrap animate__animated animate__fadeInUp">
-      <div className="card p-2 m-2">
-        <div className="card-icon">
-          <span className="material-icons-outlined text-danger">search</span>
+      <div className="card-section d-flex flex-column flex-wrap animate__animated animate__fadeInUp">
+        <div className="card p-2 m-2">
+          <div className="card-icon">
+            <span className="material-icons-outlined text-danger">search</span>
+          </div>
+          <div className="card-title">
+            <h4>Efficient Member Search</h4>
+          </div>
+          <div className="card-body">
+            <p>
+              Search & Filter with Ease: Find, Sort, and Manage Your Church
+              Members Effortlessly. Edit and Add New Members Seamlessly
+            </p>
+            <div className="gif-container">
+              <img
+                src={searchGIF}
+                alt="Animated GIF"
+                className="gif-image mb-2"
+                style={{ width: '440px' }}
+              />
+            </div>
+            <div className="card-more-info">
+              <ul>
+                <li>Advanced search options</li>
+                <li>Filter by demographics, tags, and more</li>
+                <li>Effortlessly manage member records</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div className="card-title">
-          <h6>Efficient Member Search</h6>
+        <div className="card p-2 m-2">
+          <div className="card-icon">
+            <span className="material-icons-outlined text-danger">
+              insights
+            </span>
+          </div>
+          <div className="card-title">
+            <h4>Dashboard Insights</h4>
+          </div>
+          <div className="card-body">
+            <p>
+              Insights at a Glance: Gain Valuable Member Insights with
+              Interactive Graphs and Visualizations on our Dashboard Screen. See
+              Your Church Community&apos;s Vital Statistics in a Single View.
+            </p>
+            <div className="gif-container">
+              <img
+                src={searchGIF}
+                alt="Animated GIF"
+                className="gif-image mb-2"
+                style={{ width: '440px' }}
+              />
+            </div>
+            <div className="card-more-info">
+              <ul>
+                <li>Visualize attendance trends</li>
+                <li>Track membership growth over time</li>
+                <li>View engagement and contribution analytics</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div className="card-body">
-          <p>
-            Search & Filter with Ease: Find, Sort, and Manage Your Church
-            Members Effortlessly. Edit and Add New Members Seamlessly
-          </p>
-          <div className="card-more-info">
-            <ul>
-              <li>Advanced search options</li>
-              <li>Filter by demographics, tags, and more</li>
-              <li>Effortlessly manage member records</li>
-            </ul>
+        <div className="card p-2 m-2">
+          <div className="card-icon">
+            <span className="material-icons-outlined text-danger">church</span>
+          </div>
+          <div>
+            <div className="card-title">
+              <h4>Introducing the Church Card</h4>
+            </div>
+            <div className="card-body">
+              <p>
+                Introducing the Church Card: Easily access essential information
+                about your church, including its name, address, contact details,
+                service times, and more.
+              </p>
+            </div>
+            <div className="gif-container">
+              <img
+                src={searchGIF}
+                alt="Animated GIF"
+                className="gif-image mb-2"
+                style={{ width: '440px' }}
+              />
+            </div>
+            <div className="card-more-info">
+              <ul>
+                <li>Quick access to important church details</li>
+                <li>View and edit contact information</li>
+                <li>See upcoming service schedules</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-      <div className="card p-2 m-2">
-        <div className="card-icon">
-          <span className="material-icons-outlined text-danger">
-            insights
-          </span>
-        </div>
-        <div className="card-title">
-          <h6>Dashboard Insights</h6>
-        </div>
-        <div className="card-body">
-          <p>
-            Insights at a Glance: Gain Valuable Member Insights with
-            Interactive Graphs and Visualizations on our Dashboard Screen. See
-            Your Church Community&apos;s Vital Statistics in a Single View.
-          </p>
-          <div className="card-more-info">
-            <ul>
-              <li>Visualize attendance trends</li>
-              <li>Track membership growth over time</li>
-              <li>View engagement and contribution analytics</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div className="card p-2 m-2">
-        <div className="card-icon">
-          <span className="material-icons-outlined text-danger">church</span>
-        </div>
-        <div className="card-title">
-          <h6>Church Card</h6>
-        </div>
-        <div className="card-body">
-          <p>
-            Introducing the Church Card: Easily access essential information
-            about your church, including its name, address, contact details,
-            service times, and more.
-          </p>
-          <div className="card-more-info">
-            <ul>
-              <li>Quick access to important church details</li>
-              <li>View and edit contact information</li>
-              <li>See upcoming service schedules</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
       {/* <div className="d-flex h-50">
             <div className="heroTextContainer">
               <h3 className="display-4 heroWelcome p-3">
