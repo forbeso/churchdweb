@@ -1301,7 +1301,7 @@ function Search() {
                     <p className="text-danger">This field is required</p>
                   )}
                 </div>
-                <div>
+                <div className="form-group">
                   <label htmlFor="ministry">Ministry</label>
                   <input
                     type="text"
@@ -1439,7 +1439,7 @@ function Search() {
                     onChange={handleEditOnChange}
                   />
                 </div>
-                <div>
+                <div className="form-group">
                   <label htmlFor="allergies">Allergies</label>
                   <input
                     type="text"
