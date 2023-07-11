@@ -36,22 +36,22 @@ function Data() {
     async function getAllMembers() {
       setIsLoading(true);
       const { data: members, error } = await supabase
-        .from('membervis_real')
+        .from(process.env.REACT_APP_MEMBERVIS_TABLE)
         .select('*', { count: 'exact' })
         .eq('type', 'Member');
 
       const { data: visitors, verror } = await supabase
-        .from('membervis_real')
+        .from(process.env.REACT_APP_MEMBERVIS_TABLE)
         .select('*', { count: 'exact' })
         .eq('type', 'Visitor');
 
       const { data: active, active_error } = await supabase
-        .from('membervis_real')
+        .from(process.env.REACT_APP_MEMBERVIS_TABLE)
         .select('*', { count: 'exact' })
         .eq('status', 'Active');
 
       const { data: inactive, inactive_error } = await supabase
-        .from('membervis_real')
+        .from(process.env.REACT_APP_MEMBERVIS_TABLE)
         .select('*', { count: 'exact' })
         .eq('status', 'Inactive');
 
