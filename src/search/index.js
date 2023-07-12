@@ -457,9 +457,7 @@ function Search() {
     if (!country_region) {
       setEditCrError(true);
     }
-    if (!dob) {
-      setEdit(true);
-    }
+  
 
     if (first_name && last_name && address && city && sex && country_region) {
       setShowMemberInfoDialog(true);
