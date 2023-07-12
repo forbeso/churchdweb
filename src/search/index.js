@@ -436,16 +436,8 @@ function Search() {
   };
 
   const handleOpenInfoDialog = () => {
-    const {
-      first_name,
-      last_name,
-      address,
-      city,
-      sex,
-      dob,
-      country_region,
-      email,
-    } = selectedMember || {};
+    const { first_name, last_name, address, city, sex, dob, country_region } =
+      selectedMember || {};
 
     if (!first_name) {
       setEditFnError(true);
@@ -465,19 +457,11 @@ function Search() {
     if (!country_region) {
       setEditCrError(true);
     }
-    // if (!email){
-    //   setEditEmError(true)
-    // }
+    if (!dob) {
+      setEdit(true);
+    }
 
-    if (
-      first_name &&
-      last_name &&
-      address &&
-      city &&
-      sex &&
-      country_region &&
-      email
-    ) {
+    if (first_name && last_name && address && city && sex && country_region) {
       setShowMemberInfoDialog(true);
     }
   };
@@ -765,12 +749,7 @@ function Search() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="ministry">
-                  Ministry
-                  <span>
-                    <small></small>
-                  </span>
-                </label>
+                <label htmlFor="ministry">Ministry</label>
 
                 <select
                   className="form-control"
@@ -1303,14 +1282,22 @@ function Search() {
                 </div>
                 <div className="form-group">
                   <label htmlFor="ministry">Ministry</label>
-                  <input
-                    type="text"
+                  <select
+                    className="form-control"
+                    required
                     id="ministry"
                     name="ministry"
-                    placeholder=""
                     value={selectedMember.ministry ?? ''}
                     onChange={handleEditOnChange}
-                  />
+                  >
+                    <option value="">Select Ministry</option>
+                    {minsitryList &&
+                      minsitryList.map((ministry, index) => (
+                        <option key={index} value={ministry.name}>
+                          {ministry.name}
+                        </option>
+                      ))}
+                  </select>
 
                   <label htmlFor="status">Status</label>
                   <select
