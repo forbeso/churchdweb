@@ -35,25 +35,4 @@ Once ChurchDeck is installed and running, follow these steps to get started:
 5. Access the dashboard to view insights, statistics, and reports on member data, tithes, and events.
 6. Make use of the user roles and permissions functionality to manage access for different administrators.
 
-## Contributing 👥
 
-We welcome contributions to ChurchDeck! To contribute, follow these steps:
-
-1. Fork the repository on GitHub.
-2. Create a new branch with a descriptive name: `git checkout -b feature/your-feature-name`
-3. Make your desired changes.
-4. Commit your changes: `git commit -am 'Add new feature'`
-5. Push to the branch: `git push origin feature/your-feature-name`
-6. Create a new Pull Request on the original repository.
-
-Please ensure that your contributions align with our [code of conduct](CODE_OF_CONDUCT.md) and coding standards.
-
-## License 📄
-
-ChurchDeck is released under the [MIT License](LICENSE).
-
-## Contact ✉️
-
-If you have any questions, suggestions, or issues, please feel free to contact our team at churchdeck@example.com.
-
-We appreciate your interest in ChurchDeck and hope it proves to be a valuable tool for your church community! 🙏
