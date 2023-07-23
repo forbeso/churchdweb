@@ -57,5 +57,3 @@ ChurchDeck is released under the [MIT License](LICENSE).
 If you have any questions, suggestions, or issues, please feel free to contact our team at churchdeck@example.com.
 
 We appreciate your interest in ChurchDeck and hope it proves to be a valuable tool for your church community! 🙏
-
-Note: This README is a sample template. Please customize it to match your project's specific details and requirements.
