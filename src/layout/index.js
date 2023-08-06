@@ -28,27 +28,42 @@ function Layout({ children }) {
   return (
     <div className="container-fluid">
       <div className="row h-100">
-        <div className={`col-md-3 col-lg-2 pl-0 pr-0 ${isNavOpen ? 'd-block d-md-none' : 'd-none d-md-block'}`}>
+        <div
+          className={`col-md-3 col-lg-2 pl-0 pr-0 ${
+            isNavOpen ? 'd-block d-md-none' : 'd-none d-md-block'
+          }`}
+        >
           <Nav closeNav={closeNav} />
         </div>
 
-        <div className="col-md-9 col-lg-10 overflow" style={{ backgroundColor: '#f4f7ff' }}>
+        <div
+          className="col-md-9 col-lg-10 overflow"
+          style={{ backgroundColor: '#f4f7ff' }}
+        >
           <div className="mt-3 mb-5 d-flex justify-content-between">
             <div className="d-block d-md-none">
               <button className="btn nav-button" onClick={toggleNav}>
-                {isNavOpen ? 'Close' : <span class="material-icons-outlined">menu</span>}
+                {isNavOpen ? (
+                  'Close'
+                ) : (
+                  <span className="material-icons-outlined">menu</span>
+                )}
               </button>
             </div>
-           <div className="d-flex flex-column align-items-end">
-            <p></p>
-            <strong>
-              <p className="text-dark">Hi {session && session.user.email}</p>
-            </strong>
-          </div>
+            <div className="d-flex flex-column align-items-end">
+              <p></p>
+              <strong>
+                <p className="text-dark">Hi {session && session.user.email}</p>
+              </strong>
+            </div>
 
             <div className="">
               <strong className="cursor-pointer">
-                <button type="button" className="btn logout border" onClick={signOutUser}>
+                <button
+                  type="button"
+                  className="btn logout border"
+                  onClick={signOutUser}
+                >
                   <strong>Sign Out</strong>
                 </button>
               </strong>

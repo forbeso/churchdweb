@@ -326,9 +326,9 @@ function Search() {
     if (!lastName) {
       setLastNameError(true);
     }
-    if (!ministry) {
-      setMinistryError(true);
-    }
+    // if (!ministry) {
+    //   setMinistryError(true);
+    // }
 
     // if (!emailAd) {
     //   setEmailError(true);
@@ -456,9 +456,6 @@ function Search() {
     }
     if (!country_region) {
       setEditCrError(true);
-    }
-    if (!dob) {
-      setEdit(true);
     }
 
     if (first_name && last_name && address && city && sex && country_region) {
