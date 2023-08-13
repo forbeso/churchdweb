@@ -137,6 +137,7 @@ function Search() {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [sortBy, setSortBy] = useState('Last Name');
 
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -189,6 +190,7 @@ function Search() {
   const [editEmError, setEditEmError] = useState(false);
   const [editSxError, setEditSxError] = useState(false);
   const [editCrError, setEditCrError] = useState(false);
+  const [editDobError, setEditDobError] = useState(false);
   const [duplicateError, setDuplicateError] = useState('');
   const [confirmError, setConfirmError] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState('');
@@ -302,6 +304,135 @@ function Search() {
     ? searchResults
     : filteredMembersByStatus;
 
+  const sortedMembers = membersToDisplay.slice().sort((a, b) => {
+    if (sortBy === 'Last Name') {
+      return a.last_name.localeCompare(b.last_name);
+    }
+
+    if (sortBy === 'First Name') {
+      return a.first_name.localeCompare(b.first_name);
+    }
+
+    if (sortBy === 'Ministry') {
+      return a.ministry.localeCompare(b.ministry);
+    }
+  });
+
+  function MemberInfoDialog({
+    memberInfo,
+    show,
+    onClose,
+    onConfirmUpdate,
+    confirmErr,
+    confirmMessage,
+  }) {
+    return (
+      <div className="confirmBox  rounded animate__animated animate__fadeIn">
+        <div className="closeButton" onClick={onClose}>
+          <span className="material-icons-outlined text-danger">close</span>
+        </div>
+
+        <div className="extendedBoxContent text-center">
+          <div>
+            <h3 className="text-head mb-4">
+              Confirm the details below before updating {memberInfo.first_name}
+              's information
+            </h3>
+          </div>
+          <div>
+            <strong>Last Name:</strong> {memberInfo.last_name}
+          </div>
+          <div>
+            <strong>First Name:</strong> {memberInfo.first_name}
+          </div>
+          <div>
+            <strong>Email:</strong> {memberInfo.email}
+          </div>
+          <div>
+            <strong>Member ID:</strong> {memberInfo.member_id}
+          </div>
+          <div>
+            <strong>Ministry:</strong> {memberInfo.ministry}
+          </div>
+          <div>
+            <strong>Sex:</strong> {memberInfo.sex}
+          </div>
+          <div>
+            <strong>Date of Birth:</strong> {memberInfo.dob}
+          </div>
+          <div>
+            <strong>Home Phone:</strong> {memberInfo.home_phone}
+          </div>
+          <div>
+            <strong>Mobile Phone:</strong> {memberInfo.mobile_phone}
+          </div>
+          <div>
+            <strong>Address:</strong> {memberInfo.address}
+          </div>
+          <div>
+            <strong>City:</strong> {memberInfo.city}
+          </div>
+          <div>
+            <strong>State/Province:</strong> {memberInfo.state_province}
+          </div>
+          <div>
+            <strong>Zip/Postal Code:</strong> {memberInfo.zip_postal_code}
+          </div>
+          <div>
+            <strong>Country/Region:</strong> {memberInfo.country_region}
+          </div>
+          <div>
+            <strong>Notes:</strong> {memberInfo.notes}
+          </div>
+          <div>
+            <strong>Attachments:</strong> {memberInfo.attachments}
+          </div>
+          <div>
+            <strong>Status:</strong> {memberInfo.status}
+          </div>
+          <div>
+            <strong>Physician Name:</strong> {memberInfo.physician_name}
+          </div>
+          <div>
+            <strong>Physician Phone:</strong> {memberInfo.physician_phone}
+          </div>
+          <div>
+            <strong>Allergies:</strong> {memberInfo.allergies}
+          </div>
+          <div>
+            <strong>Medications:</strong> {memberInfo.medications}
+          </div>
+          <div>
+            <strong>Insurance Carrier:</strong> {memberInfo.insurance_carrier}
+          </div>
+          <div>
+            <strong>Insurance Number:</strong> {memberInfo.insurance_number}
+          </div>
+          <div>
+            <strong>Type:</strong> {memberInfo.type}
+          </div>
+
+          <button
+            className="btn btn-primary mt-4 mb-3"
+            onClick={onConfirmUpdate}
+          >
+            Confirm Update
+          </button>
+
+          {confirmErr && confirmMessage ? (
+            <div className="bg-danger p-3">
+              <span>{confirmMessage}</span>
+            </div>
+          ) : (
+            <div className="bg-success p-3">
+              <span>{confirmMessage}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   const handleMemTypeFilter = (filter) => {
     setMemberTypeFilter(filter);
   };
@@ -326,13 +457,6 @@ function Search() {
     if (!lastName) {
       setLastNameError(true);
     }
-    // if (!ministry) {
-    //   setMinistryError(true);
-    // }
-
-    // if (!emailAd) {
-    //   setEmailError(true);
-    // }
 
     if (!sex) {
       setSexError(true);
@@ -360,7 +484,7 @@ function Search() {
       createUniqueID(firstName, lastName);
     }
 
-    if (firstName && lastName && emailAd) {
+    if (firstName && lastName && date_of_birth) {
       const isDuplicate = memberData.some(
         (item) =>
           item.first_name === firstName &&
@@ -456,6 +580,9 @@ function Search() {
     }
     if (!country_region) {
       setEditCrError(true);
+    }
+    if (!dob) {
+      setEditDobError(true);
     }
 
     if (first_name && last_name && address && city && sex && country_region) {
@@ -553,31 +680,84 @@ function Search() {
         className="d-flex flex-row flex-wrap justify-content-around mb-2 pillFilters"
         style={{ height: 110 }}
       >
-        <button
-          className={
-            memberTypeFilter === 'Everyone' ? 'btn pill activePill' : 'btn pill'
-          }
-          onClick={() => handleMemTypeFilter('Everyone')}
-        >
-          Everyone
-        </button>
-        <button
-          className={
-            memberTypeFilter === 'Members' ? 'btn pill activePill' : 'btn pill'
-          }
-          onClick={() => handleMemTypeFilter('Members')}
-        >
-          Members
-        </button>
+        <div className="dropdown">
+          <button
+            className="btn active_inactive_pill dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span className="text-primary">Member type:</span>{' '}
+            {memberTypeFilter}
+          </button>
+          <ul className="dropdown-menu" aria-labelledby="filter-dropdown">
+            <li>
+              <button
+                className="dropdown-item"
+                onClick={() => handleMemTypeFilter('Everyone')}
+              >
+                Everyone
+              </button>
+            </li>
+            <li>
+              <button
+                className="dropdown-item"
+                onClick={() => handleMemTypeFilter('Members')}
+              >
+                Members
+              </button>
+            </li>
+            <li>
+              <button
+                className="dropdown-item"
+                onClick={() => handleMemTypeFilter('Visitors')}
+              >
+                Visitors
+              </button>
+            </li>
+          </ul>
+        </div>
 
-        <button
-          className={
-            memberTypeFilter === 'Visitors' ? 'btn pill activePill' : 'btn pill'
-          }
-          onClick={() => handleMemTypeFilter('Visitors')}
-        >
-          Visitors
-        </button>
+        <div className="dropdown">
+          <button
+            className="btn active_inactive_pill dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span className="text-primary">Sort by:</span> {sortBy}
+          </button>
+          <ul className="dropdown-menu" aria-labelledby="filter-dropdown">
+            <li>
+              <button
+                className="dropdown-item"
+                onClick={() => setSortBy('First Name')}
+              >
+                First name
+              </button>
+            </li>
+            <li>
+              <button
+                className="dropdown-item"
+                onClick={() => setSortBy('Last Name')}
+              >
+                Last name
+              </button>
+            </li>
+            <li>
+              <button
+                className="dropdown-item"
+                onClick={() => setSortBy('Ministry')}
+              >
+                Ministry
+              </button>
+            </li>
+          </ul>
+        </div>
 
         <div className="dropdown">
           <button
@@ -716,7 +896,6 @@ function Search() {
                 <label htmlFor="email">Email address</label>
                 <input
                   type="email"
-                  required
                   maxLength={50}
                   className="form-control"
                   id="email"
@@ -726,7 +905,6 @@ function Search() {
                   value={emailAd}
                   onChange={(query) => {
                     setEmail(query.target.value);
-                    setEmailError(false);
                   }}
                 />
               </div>
@@ -1180,7 +1358,7 @@ function Search() {
         {isLoading ? (
           <Loader />
         ) : (
-          membersToDisplay.map((member) => (
+          sortedMembers.map((member) => (
             <div
               key={member.member_id}
               className={`profileCardBody d-flex flex-column align-items-center p-2 m-1 animate__animated animate__fadeInUp ${
@@ -1339,6 +1517,20 @@ function Search() {
                   />
                 </div>
                 <div className="form-group">
+                  <label htmlFor="dob">Date of Birth *</label>
+                  <input
+                    type="date"
+                    required
+                    className="form-control"
+                    id="dob"
+                    name="dob"
+                    placeholder=""
+                    value={selectedMember.dob ?? ''}
+                    onChange={handleEditOnChange}
+                  />
+                  {editDobError && (
+                    <p className="text-danger">This field is required</p>
+                  )}
                   <label htmlFor="home_phone">Home Phone:</label>
                   <input
                     type="text"
@@ -1348,18 +1540,6 @@ function Search() {
                     value={selectedMember.home_phone ?? ''}
                     onChange={handleEditOnChange}
                   />
-                  <label htmlFor="city">City *</label>
-                  <input
-                    type="text"
-                    id="city"
-                    name="city"
-                    placeholder=""
-                    value={selectedMember.city ?? ''}
-                    onChange={handleEditOnChange}
-                  />{' '}
-                  {editCiError && (
-                    <p className="text-danger">City is required</p>
-                  )}
                 </div>
                 <div className="form-group">
                   <label htmlFor="state_province">State / Province</label>
@@ -1401,6 +1581,18 @@ function Search() {
                   />
                   {editCrError && (
                     <p className="text-danger">Country / Region is required</p>
+                  )}
+                  <label htmlFor="city">City *</label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    placeholder=""
+                    value={selectedMember.city ?? ''}
+                    onChange={handleEditOnChange}
+                  />{' '}
+                  {editCiError && (
+                    <p className="text-danger">City is required</p>
                   )}
                 </div>
                 <div className="form-group">
