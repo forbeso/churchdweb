@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { SupabaseContext } from '../SupabaseContext';
 import viewmem from '../assets/viewyellow.png';
 import searchGIF from '../assets/searchGIF.gif';
+import dashboardGIF from '../assets/dashboardGIF.gif';
+import churchCardGIF from '../assets/churchCardGIF.png';
 import './style.scss';
 
 function Home() {
@@ -83,7 +85,7 @@ function Home() {
             </p>
             <div className="gif-container">
               <img
-                src={searchGIF}
+                src={dashboardGIF}
                 alt="Animated GIF"
                 className="gif-image mb-2"
                 style={{ width: '440px' }}
@@ -112,15 +114,16 @@ function Home() {
                 about your church, including its name, address, contact details,
                 service times, and more.
               </p>
+              <div className="gif-container">
+                <img
+                  src={churchCardGIF}
+                  alt="Animated GIF"
+                  className="gif-image mb-2"
+                  style={{ width: '440px' }}
+                />
+              </div>
             </div>
-            <div className="gif-container">
-              <img
-                src={searchGIF}
-                alt="Animated GIF"
-                className="gif-image mb-2"
-                style={{ width: '440px' }}
-              />
-            </div>
+
             <div className="card-more-info">
               <ul>
                 <li>Quick access to important church details</li>

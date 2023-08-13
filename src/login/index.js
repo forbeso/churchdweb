@@ -7,8 +7,8 @@ import { SupabaseContext } from '../SupabaseContext';
 import './style.scss';
 
 function Login() {
-  const [email, setEmail] = useState('testuser@test.com');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [sessionData, setSessionData] = useState('');
   const [loginError, setLoginError] = useState('');
 
