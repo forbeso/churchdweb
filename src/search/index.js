@@ -313,9 +313,9 @@ function Search() {
       return a.first_name.localeCompare(b.first_name);
     }
 
-    if (sortBy === 'Ministry') {
-      return a.ministry.localeCompare(b.ministry);
-    }
+    // if (sortBy === 'Ministry') {
+    //   return a.ministry.localeCompare(b.ministry);
+    // }
   });
 
   function MemberInfoDialog({
@@ -748,14 +748,14 @@ function Search() {
                 Last name
               </button>
             </li>
-            <li>
+            {/* <li>
               <button
                 className="dropdown-item"
                 onClick={() => setSortBy('Ministry')}
               >
                 Ministry
               </button>
-            </li>
+            </li> */}
           </ul>
         </div>
 
