@@ -11,6 +11,118 @@ import Loader from '../loader';
 
 import { SupabaseContext } from '../SupabaseContext';
 
+function MemberInfoDialog({
+  memberInfo,
+  show,
+  onClose,
+  onConfirmUpdate,
+  confirmErr,
+  confirmMessage,
+}) {
+  return (
+    <div className="confirmBox  rounded animate__animated animate__fadeIn">
+      <div className="closeButton" onClick={onClose}>
+        <span className="material-icons-outlined text-danger">close</span>
+      </div>
+
+      <div className="extendedBoxContent text-center">
+        <div>
+          <h3 className="text-head mb-4">
+            Confirm the details below before updating {memberInfo.first_name}'s
+            information
+          </h3>
+        </div>
+        <div>
+          <strong>Last Name:</strong> {memberInfo.last_name}
+        </div>
+        <div>
+          <strong>First Name:</strong> {memberInfo.first_name}
+        </div>
+        <div>
+          <strong>Email:</strong> {memberInfo.email}
+        </div>
+        <div>
+          <strong>Member ID:</strong> {memberInfo.member_id}
+        </div>
+        <div>
+          <strong>Ministry:</strong> {memberInfo.ministry}
+        </div>
+        <div>
+          <strong>Sex:</strong> {memberInfo.sex}
+        </div>
+        <div>
+          <strong>Date of Birth:</strong> {memberInfo.dob}
+        </div>
+        <div>
+          <strong>Home Phone:</strong> {memberInfo.home_phone}
+        </div>
+        <div>
+          <strong>Mobile Phone:</strong> {memberInfo.mobile_phone}
+        </div>
+        <div>
+          <strong>Address:</strong> {memberInfo.address}
+        </div>
+        <div>
+          <strong>City:</strong> {memberInfo.city}
+        </div>
+        <div>
+          <strong>State/Province:</strong> {memberInfo.state_province}
+        </div>
+        <div>
+          <strong>Zip/Postal Code:</strong> {memberInfo.zip_postal_code}
+        </div>
+        <div>
+          <strong>Country/Region:</strong> {memberInfo.country_region}
+        </div>
+        <div>
+          <strong>Notes:</strong> {memberInfo.notes}
+        </div>
+        <div>
+          <strong>Attachments:</strong> {memberInfo.attachments}
+        </div>
+        <div>
+          <strong>Status:</strong> {memberInfo.status}
+        </div>
+        <div>
+          <strong>Physician Name:</strong> {memberInfo.physician_name}
+        </div>
+        <div>
+          <strong>Physician Phone:</strong> {memberInfo.physician_phone}
+        </div>
+        <div>
+          <strong>Allergies:</strong> {memberInfo.allergies}
+        </div>
+        <div>
+          <strong>Medications:</strong> {memberInfo.medications}
+        </div>
+        <div>
+          <strong>Insurance Carrier:</strong> {memberInfo.insurance_carrier}
+        </div>
+        <div>
+          <strong>Insurance Number:</strong> {memberInfo.insurance_number}
+        </div>
+        <div>
+          <strong>Type:</strong> {memberInfo.type}
+        </div>
+
+        <button className="btn btn-primary mt-4 mb-3" onClick={onConfirmUpdate}>
+          Confirm Update
+        </button>
+
+        {confirmErr && confirmMessage ? (
+          <div className="bg-danger p-3">
+            <span>{confirmMessage}</span>
+          </div>
+        ) : (
+          <div className="bg-success p-3">
+            <span>{confirmMessage}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Search() {
   const { session, updateSession } = useContext(SupabaseContext);
 
