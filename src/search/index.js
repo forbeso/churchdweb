@@ -309,9 +309,9 @@ function Search() {
       return a.last_name.localeCompare(b.last_name);
     }
 
-    // if (sortBy === 'First Name') {
-    //   return a.first_name.localeCompare(b.first_name);
-    // }
+    if (sortBy === 'First Name') {
+      return a.first_name.localeCompare(b.first_name);
+    }
 
     if (sortBy === 'Status') {
       return a.status.localeCompare(b.status);
@@ -732,14 +732,14 @@ function Search() {
             <span className="text-primary">Sort by:</span> {sortBy}
           </button>
           <ul className="dropdown-menu" aria-labelledby="filter-dropdown">
-            {/* <li>
+            <li>
               <button
                 className="dropdown-item"
                 onClick={() => setSortBy('First Name')}
               >
                 First name
               </button>
-            </li> */}
+            </li>
             <li>
               <button
                 className="dropdown-item"
