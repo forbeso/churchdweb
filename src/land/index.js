@@ -4,29 +4,11 @@ import supabase from '../supabase';
 
 import { Link } from 'react-router-dom';
 import { SupabaseContext } from '../SupabaseContext';
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/hLkuvm3It6r
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+
 import { Button } from '@mui/material';
-import {
-  IconButton,
-  Menu as DropdownMenu,
-  MenuItem as DropdownMenuItem,
-  Divider as DropdownMenuSeparator,
-  Popover as DropdownMenuContent,
-  Typography as DropdownMenuLabel,
-} from '@mui/material';
-import {
-  Avatar,
-  // Image as AvatarImage,
-  // Fallback as AvatarFallback,
-} from '@mui/material';
-import { List, ListItem, ListItemText, Drawer } from '@mui/material';
+
 import {
   Card,
-  CardHeader,
   CardContent,
   CardActionArea,
   Typography as CardTitle,
@@ -34,8 +16,8 @@ import {
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarIcon from '../assets/calendaricon';
-import PeopleIcon from '@mui/icons-material/People';
-import heroImage from '../assets/viewmem.png';
+
+import heroImage from '../assets/1.png';
 
 export default function Land() {
   return (
@@ -71,9 +53,8 @@ export default function Land() {
             <img
               alt="Hero"
               className="mx-auto aspect-[4/3] overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
-              height="650"
               src="{heroImage}"
-              width="550"
+              width={350}
             />
           </div>
         </div>

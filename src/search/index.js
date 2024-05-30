@@ -20,7 +20,7 @@ function MemberInfoDialog({
   confirmMessage,
 }) {
   return (
-    <div className="confirmBox  rounded animate__animated animate__fadeIn">
+    <div className="confirmBox rounded animate__animated animate__fadeIn">
       <div className="closeButton" onClick={onClose}>
         <span className="material-icons-outlined text-danger">close</span>
       </div>

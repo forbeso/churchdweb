@@ -13,7 +13,10 @@ import { SupabaseProvider } from './SupabaseContext';
 import Activities from './activities';
 import TithesPage from './tithes';
 import NewLogin from './newlogin';
-import Newsearch from './newsearch';
+import NewSearch from './newsearch';
+import NewTithes from './newtithes';
+import NewEvent from './newevent';
+import NewDashboard from './newdashboard';
 
 function NoInternetScreen() {
   return (
@@ -59,12 +62,13 @@ export default function App() {
           )}
 
           <Route path="/cdeck" element={<Layout />}>
-            <Route path="/cdeck/search" element={<Newsearch />} />
-            <Route path="/cdeck/churchinfo" element={<Info />} />
-            <Route path="/cdeck/dashboard" element={<Data />} />
+            <Route path="/cdeck/search" element={<NewSearch />} />
+            <Route path="/cdeck/info" element={<Info />} />
+            <Route path="/cdeck/dashboard" element={<NewDashboard />} />
             <Route path="/cdeck/home" element={<Land />} />
             <Route path="/cdeck/activities" element={<Activities />} />
-            <Route path="/cdeck/tithes" element={<TithesPage />} />
+            <Route path="/cdeck/tithes" element={<NewTithes />} />
+            <Route path="/cdeck/events" element={<NewEvent />} />
           </Route>
         </Routes>
       </SupabaseProvider>
