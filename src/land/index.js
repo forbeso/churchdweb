@@ -158,7 +158,7 @@ export default function Land() {
                   Key Metrics
                 </h2>
                 <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Stay on top of your church's vital statistics with our
+                  Stay on top of your church's vital statistics with
                   comprehensive reporting.
                 </p>
               </div>

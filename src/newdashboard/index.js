@@ -234,7 +234,7 @@ export default function NewDashboard() {
         Your Member Dashboard
       </h1>
       <p className="mb-6 text-gray-500">
-        Explore our directory of members and connect with the community.
+        Explore your church data in one place.
       </p>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 animate__animated animate__fadeIn">
         <Card className="p-4">

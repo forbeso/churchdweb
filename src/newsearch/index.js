@@ -128,7 +128,7 @@ export default function NewSearch() {
         Member Directory
       </h1>
       <p className="mb-6 text-gray-500">
-        Explore our directory of members and connect with the community.
+        Explore your directory of members and connect with the community.
       </p>
       <div className="mb-6 md:mb-8 flex flex-col md:flex-row items-start md:items-center gap-4">
         <input

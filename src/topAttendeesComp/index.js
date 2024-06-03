@@ -2,7 +2,7 @@ import Avatar from 'boring-avatars';
 
 export default function TopAttendeesComp() {
   return (
-    <div className="bg-[#f8f8f8] rounded-lg shadow-lg p-6 animate__animated animate__fadeInUp">
+    <div className="bg-[#f8f8f8] rounded-lg shadow-lg p-6 animate__animated animate__fadeInUp overflow-x-scroll">
       <h2 className="text-2xl font-bold mb-4 text-[#4a4a4a]">Top Attendees</h2>
       <div className="overflow-x-auto">
         <table className="w-full text-[#4a4a4a]">
@@ -27,7 +27,7 @@ export default function TopAttendeesComp() {
               <td className="px-4 py-3">
                 <div className="flex items-center">
                   <Avatar
-                    size={20}
+                    size={30}
                     name="hel"
                     variant="beam"
                     colors={[
@@ -39,8 +39,8 @@ export default function TopAttendeesComp() {
                     ]}
                   />
                   <Avatar
-                    size={20}
-                    name="l"
+                    size={30}
+                    name="hel"
                     variant="beam"
                     colors={[
                       '#92A1C6',
@@ -51,7 +51,7 @@ export default function TopAttendeesComp() {
                     ]}
                   />
                   <Avatar
-                    size={20}
+                    size={30}
                     name="b"
                     variant="beam"
                     colors={[
@@ -78,7 +78,7 @@ export default function TopAttendeesComp() {
               <td className="px-4 py-3">
                 <div className="flex items-center">
                   <Avatar
-                    size={20}
+                    size={30}
                     name="a"
                     variant="beam"
                     colors={[
@@ -105,7 +105,7 @@ export default function TopAttendeesComp() {
               <td className="px-4 py-3">
                 <div className="flex items-center">
                   <Avatar
-                    size={20}
+                    size={30}
                     name="hll"
                     variant="beam"
                     colors={[
@@ -117,7 +117,7 @@ export default function TopAttendeesComp() {
                     ]}
                   />
                   <Avatar
-                    size={20}
+                    size={30}
                     name="Ma"
                     variant="beam"
                     colors={[
