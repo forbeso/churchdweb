@@ -8,8 +8,8 @@ import {
   Card,
   CardContent,
   CardActionArea,
-  Typography as CardTitle,
   CardHeader,
+  Typography as CardTitle,
 } from '@mui/material';
 import './style.scss';
 
@@ -19,10 +19,10 @@ function Info() {
   return (
     <div className="space-y-8">
       <Card>
-        <CardHeader>
-          <p>Church Details</p>
-          <p>Update your church's name, address, and contact information.</p>
-        </CardHeader>
+        <CardHeader
+          title="Church Details"
+          subheader="Update your church's name, address, and contact information."
+        />
         <CardContent>
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">

@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import Avatar from 'boring-avatars';
+import { stripEmail } from '../utils/utils';
 
 function Layout({ children }) {
   const { session, updateSession } = useContext(SupabaseContext);
@@ -42,8 +43,9 @@ function Layout({ children }) {
             </span>
           </Link>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <NotificationsNoneIcon />
+          {session && stripEmail(session.user.email)}
           <Avatar
             size={40}
             name="Maria Mitchell"

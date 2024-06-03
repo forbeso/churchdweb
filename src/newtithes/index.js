@@ -21,7 +21,7 @@ export default function NewTithes() {
   return (
     <>
       <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate__animated animate__fadeIn">
           <div className="bg-gray-100  rounded-lg p-4">
             <div className="text-gray-500  text-sm">Total Tithes</div>
             <div className="text-2xl font-bold">$4,950.00</div>
@@ -64,7 +64,7 @@ export default function NewTithes() {
           </div>
         </div>
       </div>
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden animate__animated animate__fadeInUp">
         <Table>
           <TableHead>
             <TableRow>

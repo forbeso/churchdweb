@@ -60,9 +60,13 @@ function FilterAndSortMenu({
       <FormControl variant="outlined" style={{ minWidth: 120 }}>
         <InputLabel>Sort by</InputLabel>
         <Select value={sortOption} onChange={handleSortChange} label="Sort by">
-          <MenuItem value="name">Name</MenuItem>
+          <MenuItem value="firstname">First Name</MenuItem>
+          <MenuItem value="lastname">Last Name</MenuItem>
           <MenuItem value="email">Email</MenuItem>
-          <MenuItem value="date">Date Joined</MenuItem>
+          <MenuItem value="date" disabled>
+            Date Joined
+          </MenuItem>
+          <MenuItem value="status">Status</MenuItem>
         </Select>
       </FormControl>
     </div>

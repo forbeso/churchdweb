@@ -17,6 +17,7 @@ import NewSearch from './newsearch';
 import NewTithes from './newtithes';
 import NewEvent from './newevent';
 import NewDashboard from './newdashboard';
+import Settings from './settings';
 
 function NoInternetScreen() {
   return (
@@ -69,6 +70,7 @@ export default function App() {
             <Route path="/cdeck/activities" element={<Activities />} />
             <Route path="/cdeck/tithes" element={<NewTithes />} />
             <Route path="/cdeck/events" element={<NewEvent />} />
+            <Route path="/cdeck/settings" element={<Settings />} />
           </Route>
         </Routes>
       </SupabaseProvider>

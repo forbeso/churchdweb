@@ -7,6 +7,7 @@ import Avatar from 'boring-avatars';
 import supabase from '../supabase';
 import { SupabaseContext } from '../SupabaseContext';
 import Loader from '../loader.js';
+import AddNewMemberDialog from '../addNewMemberDialog/index.js';
 
 export default function NewSearch() {
   const { session } = useContext(SupabaseContext);
@@ -17,8 +18,9 @@ export default function NewSearch() {
   const [memberData, setMemberData] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [filters, setFilters] = useState(['Everyone']); // Initialize with default filter
-  const [sortBy, setSortBy] = useState('name');
+  const [sortBy, setSortBy] = useState('lastname');
   const [selectedMember, setSelectedMember] = useState(null);
+  const [isNewMemberDialogOpen, setIsNewMemberDialogOpen] = useState(false);
 
   useEffect(() => {
     const user = session?.user;
@@ -41,6 +43,10 @@ export default function NewSearch() {
 
   const handleSelectedMember = (member) => {
     setSelectedMember(member);
+  };
+
+  const handleToggleNewMemberDialog = () => {
+    setIsNewMemberDialogOpen(!isNewMemberDialogOpen);
   };
 
   const handleOnChange = (query) => {
@@ -80,18 +86,28 @@ export default function NewSearch() {
   };
 
   const sortMembers = (members) => {
-    return members.slice().sort((a, b) => {
-      if (sortBy === 'name') {
-        return a.last_name.localeCompare(b.last_name);
-      }
-      if (sortBy === 'email') {
-        return a.email.localeCompare(b.email);
-      }
-      if (sortBy === 'date') {
-        return new Date(b.date_joined) - new Date(a.date_joined);
-      }
-      return 0;
-    });
+    return (
+      members &&
+      members.slice().sort((a, b) => {
+        if (sortBy === 'firstname') {
+          return a.first_name.localeCompare(b.first_name);
+        }
+        if (sortBy === 'lastname') {
+          return a.last_name.localeCompare(b.last_name);
+        }
+        if (sortBy === 'email') {
+          return a.email?.localeCompare(b.email);
+        }
+
+        if (sortBy === 'status') {
+          return a.status?.localeCompare(b.status);
+        }
+        if (sortBy === 'date') {
+          return new Date(b.date_joined) - new Date(a.date_joined);
+        }
+        return 0;
+      })
+    );
   };
 
   const membersToDisplay = searchQuery ? searchResults : memberData;
@@ -102,6 +118,12 @@ export default function NewSearch() {
 
   return (
     <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
+      {isNewMemberDialogOpen && (
+        <AddNewMemberDialog
+          handleToggle={handleToggleNewMemberDialog}
+        ></AddNewMemberDialog>
+      )}
+
       <h1 className="mb-6 text-3xl font-bold md:mb-8 md:text-4xl">
         Member Directory
       </h1>
@@ -119,10 +141,19 @@ export default function NewSearch() {
         <div className="flex items-center gap-4">
           <FilterAndSortMenu
             filters={['Everyone', 'Members', 'Visitors']}
-            defaultSort="name"
+            defaultSort="lastname"
             onFilterChange={handleFilterChange}
             onSortChange={handleSortChange}
           />
+        </div>
+        <div>
+          <Button
+            className="text-white"
+            onClick={handleToggleNewMemberDialog}
+            style={{ backgroundColor: '#65A20C' }}
+          >
+            Grow my flock
+          </Button>
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -155,7 +186,7 @@ export default function NewSearch() {
                     {member.email}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {member.ministry}
+                    {member.status}
                   </div>
                 </div>
               </div>

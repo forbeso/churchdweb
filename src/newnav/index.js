@@ -1,3 +1,7 @@
+import React, { useContext, useState } from 'react';
+
+import supabase from '../supabase';
+import { SupabaseContext } from '../SupabaseContext';
 import {
   List,
   ListItem,
@@ -22,19 +26,22 @@ import {
 } from '../assets/icons/svgs';
 
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { stripEmail } from '../utils/utils';
 
 const listStyle = {
   textDecoration: 'none',
 };
 
 export default function Newnav({ isNavOpen, toggleNav }) {
+  const { session, updateSession } = useContext(SupabaseContext);
+
   return (
     <div className="flex flex-col ">
       <Drawer variant="permanent" anchor="left" className="border-rs">
         <div className="mb-6 space-y-2 bg-white">
           <div className="flex justify-between px-3 py-3">
-            <p className="text-sm font-semibold uppercase text-gray-500">
-              Admin
+            <p className="text-md font-bold uppercase text-teal_look">
+              {session && stripEmail(session.user.email)}
             </p>
 
             <p className="text-md font-semibold">
@@ -63,12 +70,6 @@ export default function Newnav({ isNavOpen, toggleNav }) {
               </ListItemButton>
             </NavLink>
             <List component="div" disablePadding>
-              <ListItemButton component="a" href="#" className="pl-4">
-                <ListItemIcon>
-                  <UsersIcon />
-                </ListItemIcon>
-                <ListItemText primary="Members" />
-              </ListItemButton>
               <NavLink to="/cdeck/events" style={listStyle}>
                 <ListItemButton button component="a" href="#" className="pl-4">
                   <ListItemIcon>
@@ -112,14 +113,16 @@ export default function Newnav({ isNavOpen, toggleNav }) {
                 </ListItemButton>
               </List>
             </NavLink>
-            <List component="div" disablePadding>
-              <ListItemButton button component="a" href="#" className="pl-4">
-                <ListItemIcon>
-                  <SettingsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Settings" />
-              </ListItemButton>
-            </List>
+            <NavLink to="/cdeck/settings" style={listStyle}>
+              <List component="div" disablePadding>
+                <ListItemButton button component="a" href="#" className="pl-4">
+                  <ListItemIcon>
+                    <SettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Settings" />
+                </ListItemButton>
+              </List>
+            </NavLink>
           </List>
         </div>
       </Drawer>

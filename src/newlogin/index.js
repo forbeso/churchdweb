@@ -43,7 +43,9 @@ export default function NewLogin() {
         </div>
         <form className="space-y-4">
           <div className="gap">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="mr-3">
+              Email
+            </Label>
             <Input
               type="email"
               placeholder="Username"
@@ -55,7 +57,9 @@ export default function NewLogin() {
             />
           </div>
           <div>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="mr-3">
+              Password
+            </Label>
             <Input
               type="password"
               placeholder="Password"

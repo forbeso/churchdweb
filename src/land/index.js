@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { SupabaseContext } from '../SupabaseContext';
 
 import { Button } from '@mui/material';
-
 import {
   Card,
   CardContent,
@@ -17,9 +16,12 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarIcon from '../assets/calendaricon';
 
-import heroImage from '../assets/1.png';
+import heroImage from '../assets/avatarsgrid.gif';
+import dash from '../assets/web.jpg';
 
 export default function Land() {
+  const { session, updateSession } = useContext(SupabaseContext);
+
   return (
     <div>
       <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
@@ -30,7 +32,7 @@ export default function Land() {
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl ">
                   Welcome to Churchdeck
                 </h1>
-                <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 animate__animated animate__fadeIn">
                   Manage your church's membership, events, and reporting all in
                   one place.
                 </p>
@@ -52,8 +54,8 @@ export default function Land() {
             </div>
             <img
               alt="Hero"
-              className="mx-auto aspect-[4/3] overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
-              src="{heroImage}"
+              className="mx-auto aspect-[4/3] overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last animate__animated animate__fadeIn"
+              src={heroImage}
               width={350}
             />
           </div>
@@ -221,7 +223,7 @@ export default function Land() {
               alt="Key Metrics"
               className="mx-auto aspect-[4/3] overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
               height="650"
-              src="/placeholder.svg"
+              src={dash}
               width="550"
             />
           </div>
