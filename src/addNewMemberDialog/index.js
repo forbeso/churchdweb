@@ -125,7 +125,7 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
       );
       if (!isDuplicate) {
         const { data, error } = await supabase
-          .from(process.env.REACT_APP_MEMBERVIS_TABLE)
+          .from(process.env.DEV_MEMBERVIS_TABLE)
           .insert([
             {
               member_id: memberId,

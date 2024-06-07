@@ -5,7 +5,7 @@ import { SupabaseContext } from '../SupabaseContext';
 import Label from '@mui/material/FormLabel';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
-
+import ChurchIcon from '../assets/churchicon';
 export default function NewLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,7 +38,8 @@ export default function NewLogin() {
     <div className="flex h-screen w-full items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md rounded-lg bg-white p-5 shadow-lg dark:bg-gray-900">
         <div className="mb-5 flex items-center justify-center">
-          <MountainIcon className="h-8 w-8" />
+          <ChurchIcon className="h-6 w-6 text-dark dark:text-gray-50" />
+
           <span className="ml-2 text-2xl font-bold">ChurchDeck</span>
         </div>
         <form className="space-y-4">
