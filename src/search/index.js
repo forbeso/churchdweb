@@ -689,7 +689,7 @@ function Search() {
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <span className="text-primary">Member type:</span>{' '}
+            <span className="text-primary">Member type:</span>
             {memberTypeFilter}
           </button>
           <ul className="dropdown-menu" aria-labelledby="filter-dropdown">

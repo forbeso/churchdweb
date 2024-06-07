@@ -65,7 +65,7 @@ export default function Land() {
         <div className="container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4 md:px-6">
           <Card className="p-4">
             <CardTitle className="flex flex-row items-center justify-between pb-2">
-              <h5 className="text-sm font-medium">Member Management</h5>
+              Member Management
               <UsersIcon className="w-6 h-6 text-gray-500" />
             </CardTitle>
             <CardContent>

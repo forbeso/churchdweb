@@ -21,12 +21,15 @@ export default function NewSearch() {
   const [sortBy, setSortBy] = useState('lastname');
   const [selectedMember, setSelectedMember] = useState(null);
   const [isNewMemberDialogOpen, setIsNewMemberDialogOpen] = useState(false);
+  const [loggedIn, setLoggedin] = useState(false);
 
   useEffect(() => {
     const user = session?.user;
 
     if (!session) {
       navigate('/');
+    } else {
+      setLoggedin(true);
     }
 
     async function getAllMembers() {
@@ -121,6 +124,7 @@ export default function NewSearch() {
       {isNewMemberDialogOpen && (
         <AddNewMemberDialog
           handleToggle={handleToggleNewMemberDialog}
+          memberData={memberData}
         ></AddNewMemberDialog>
       )}
 

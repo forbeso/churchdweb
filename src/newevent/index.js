@@ -73,10 +73,10 @@ export default function NewEvent() {
 
                     <div className="flex items-center gap-2">
                       <CalendarTodayIcon className="h-4 w-4 text-gray-500" />
-                      <Typography variant="body2" className="text-gray-500">
+                      <p variant="body2" className="text-gray-500">
                         {formatDate(event.start_date)} -
                         {formatDate(event.end_date)}
-                      </Typography>
+                      </p>
                       <AccessTimeIcon className="h-4 w-4 text-gray-500" />
                       <span variant="body2" className="text-gray-500">
                         {event.start_time} - {event.end_time}

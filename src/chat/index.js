@@ -28,7 +28,7 @@ function ChatButton() {
         </div>
       ) : (
         <button
-          type="button"
+          type="submit"
           className="chat-toggle-button btn btn-primary"
           onClick={handleChatToggle}
         >
