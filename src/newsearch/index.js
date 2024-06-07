@@ -35,7 +35,7 @@ export default function NewSearch() {
     async function getAllMembers() {
       setIsLoading(true);
       const { data: membervis, error } = await supabase
-        .from(process.env.DEV_MEMBERVIS_TABLE)
+        .from(process.env.REACT_APP_MEMBERVIS_TABLE)
         .select('*');
       setIsLoading(false);
       setMemberData(membervis);
