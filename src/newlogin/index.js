@@ -70,6 +70,11 @@ export default function NewLogin() {
               onChange={(query) => handlePasswordChange(query)}
             />
           </div>
+          {loginError && (
+            <div className="bg-danger p-2 mb-3  text-center rounded">
+              <span className="errorMsg text-white">{loginError}</span>
+            </div>
+          )}
           <button
             className="bg-dark text-white w-full"
             type="button"

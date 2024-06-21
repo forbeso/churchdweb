@@ -8,6 +8,7 @@ import supabase from '../supabase';
 import { SupabaseContext } from '../SupabaseContext';
 import Loader from '../loader.js';
 import AddNewMemberDialog from '../addNewMemberDialog/index.js';
+import EditMemberDialog from '../editMemberDialog/index.js';
 
 export default function NewSearch() {
   const { session } = useContext(SupabaseContext);
@@ -22,6 +23,9 @@ export default function NewSearch() {
   const [selectedMember, setSelectedMember] = useState(null);
   const [isNewMemberDialogOpen, setIsNewMemberDialogOpen] = useState(false);
   const [loggedIn, setLoggedin] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [ministryList, setMinistryList] = useState([]);
 
   useEffect(() => {
     const user = session?.user;
@@ -42,10 +46,24 @@ export default function NewSearch() {
     }
 
     getAllMembers();
-  }, [navigate, session]);
+
+    async function getMinistries() {
+      const { data: ministry, error } = await supabase
+        .from('ministry')
+        .select('name');
+      setMinistryList(ministry);
+    }
+
+    getMinistries();
+  }, [navigate, session, session?.user]);
 
   const handleSelectedMember = (member) => {
     setSelectedMember(member);
+    setIsDialogOpen(true);
+  };
+
+  const handleToggleEditMember = () => {
+    setIsDialogOpen(!isDialogOpen);
   };
 
   const handleToggleNewMemberDialog = () => {
@@ -65,7 +83,7 @@ export default function NewSearch() {
   };
 
   const handleFilterChange = (newFilters) => {
-    console.log('New Filters:', newFilters); // Debugging log
+    //console.log('New Filters:', newFilters); // Debugging log
     setFilters(newFilters);
   };
 
@@ -117,7 +135,7 @@ export default function NewSearch() {
   const filteredMembers = filterMembers(membersToDisplay);
   const sortedMembers = sortMembers(filteredMembers);
 
-  console.log('Filtered Members:', filteredMembers); // Debugging log
+  //console.log('Filtered Members:', filteredMembers); // Debugging log
 
   return (
     <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
@@ -126,6 +144,16 @@ export default function NewSearch() {
           handleToggle={handleToggleNewMemberDialog}
           memberData={memberData}
         ></AddNewMemberDialog>
+      )}
+
+      {selectedMember && (
+        <EditMemberDialog
+          selectedMember={selectedMember}
+          open={isDialogOpen}
+          handleToggleEditMember={handleToggleEditMember}
+          setSelectedMember={setSelectedMember}
+          ministryList={ministryList}
+        ></EditMemberDialog>
       )}
 
       <h1 className="mb-6 text-3xl font-bold md:mb-8 md:text-4xl">
@@ -168,6 +196,7 @@ export default function NewSearch() {
             <Card
               className="flex flex-col animate__animated animate__fadeIn cursor-pointer"
               key={member.member_id}
+              onClick={() => handleSelectedMember(member)}
             >
               <div className="flex items-center gap-4 p-4">
                 <Avatar

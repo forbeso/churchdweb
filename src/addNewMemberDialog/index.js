@@ -319,7 +319,7 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
               className="text-right underline cursor-pointer text-sm"
               onClick={() => setSeeMoreFormFields(!seeMoreFormFields)}
             >
-              Add Info.
+              Add more details.
             </p>
           </Grid>
           {seeMoreFormFields && (

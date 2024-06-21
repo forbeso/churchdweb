@@ -636,7 +636,7 @@ function Search() {
     const { data, error } = await supabase
       .from(process.env.REACT_APP_MEMBERVIS_TABLE)
       .delete()
-      .eq('id', 'df22e057-56ba-4ed8-86a1-df89c79ea9c4');
+      .eq('id', '');
   };
 
   const handleEditOnChange = (event) => {
