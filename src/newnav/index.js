@@ -62,7 +62,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
               </ListItemButton>
             </NavLink>
             <NavLink to="/cdeck/search" style={listStyle}>
-              <ListItemButton component="a" href="#">
+              <ListItemButton component="a">
                 <ListItemIcon>
                   <LayoutDashboardIcon />
                 </ListItemIcon>
