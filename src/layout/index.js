@@ -37,10 +37,8 @@ function Layout({ children }) {
             <MenuIcon onClick={toggleNav} className="cursor-pointer"></MenuIcon>
           </div>
           <Link className="flex items-center gap-2" to="/cdeck/home">
-            <ChurchIcon className="h-6 w-6 text-dark dark:text-gray-50" />
-            <span className="text-lg font-semibold text-dark dark:text-gray-50">
-              Churchdeck
-            </span>
+            <ChurchIcon className="h-6 w-6 text-dark " />
+            <span className="text-lg font-semibold text-dark ">Churchdeck</span>
           </Link>
         </div>
         <div className="flex items-center gap-2">
