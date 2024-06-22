@@ -81,8 +81,8 @@ export default function ExploreDialog({ showExploreDialog }) {
               <Card key={i} sx={{ display: 'flex', flexDirection: 'column' }}>
                 <CardMedia
                   component="img"
-                  height="200"
-                  sx={{ width: 'auto', maxHeight: '200px' }}
+                  height="300"
+                  sx={{ width: 'auto', maxHeight: '300px' }}
                   src={item.img}
                   alt={item.title}
                 />

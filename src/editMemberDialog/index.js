@@ -259,7 +259,6 @@ export default function EditMemberDialog({
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                type="number"
                 fullWidth
                 id="phone"
                 name="mobile_phone"

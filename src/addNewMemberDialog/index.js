@@ -222,6 +222,7 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
                 label="First Name"
                 placeholder="Enter first name"
                 variant="outlined"
+                helperText={firstNameError && 'First name is required'}
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </Grid>
@@ -232,6 +233,8 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
                 label="Last Name"
                 placeholder="Enter last name"
                 variant="outlined"
+                helperText={lastNameError && 'Last name is required'}
+                FormHelperTextProps={{ color: 'red' }}
                 onChange={(e) => setLastName(e.target.value)}
               />
             </Grid>
@@ -245,6 +248,8 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
                 label="Email"
                 placeholder="Enter email address"
                 variant="outlined"
+                helperText={emailError && 'Email is required'}
+                FormHelperTextProps={{ color: '#d50000' }}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
@@ -268,9 +273,9 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
                 <MenuItem value="female">Female</MenuItem>
               </Select>
 
-              {/* {sexError && (
+              {sexError && (
                 <p className="text-danger">This field is required</p>
-              )} */}
+              )}
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -279,6 +284,7 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
                 label="Address line 1"
                 placeholder="Enter address"
                 variant="outlined"
+                helperText={addressError && 'Address is required'}
                 onChange={(e) => setAddress(e.target.value)}
               />
             </Grid>
@@ -290,6 +296,7 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
                 id="country"
                 label="Country/Region"
                 placeholder="Enter country/region"
+                helperText={countryError && 'Country is required'}
                 variant="outlined"
                 onChange={(e) => setCountryRegion(e.target.value)}
               />
