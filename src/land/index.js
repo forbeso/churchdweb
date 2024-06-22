@@ -19,9 +19,15 @@ import CalendarIcon from '../assets/calendaricon';
 import heroImage from '../assets/avatarsgrid.gif';
 import dash from '../assets/web.jpg';
 import PhotoGrid from '../PhotoGrid';
+import ExploreDialog from '../exploreDialog';
 
 export default function Land() {
   const { session, updateSession } = useContext(SupabaseContext);
+  const [showExploreDialog, setShowExploreDialog] = useState(false);
+
+  const handleToggleExploreDialog = () => {
+    setShowExploreDialog(!showExploreDialog);
+  };
 
   return (
     <div>
@@ -41,13 +47,18 @@ export default function Land() {
               <div className="flex flex-col gap-2 min-[400px]:flex-row ">
                 <Link
                   className="inline-flex h-10 items-center justify-center rounded-md bg-dark px-8 text-sm font-medium text-white shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                  href="#"
+                  onClick={handleToggleExploreDialog}
                 >
                   Explore Features
                 </Link>
+                {showExploreDialog && (
+                  <ExploreDialog
+                    showExploreDialog={handleToggleExploreDialog}
+                  ></ExploreDialog>
+                )}
                 <Link
+                  to="/cdeck/search"
                   className="inline-flex h-10 items-center justify-center rounded-md border border-gray-200 border-gray-200 bg-white px-8 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
-                  href="#"
                 >
                   Get Started
                 </Link>
