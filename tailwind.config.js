@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         teal_look: '#098F8F',
         purple_look: '#49007E',
+        caramel_ess: '#E3AF64',
       },
     },
   },

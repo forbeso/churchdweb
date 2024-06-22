@@ -34,14 +34,17 @@ export default function ConfirmDialog({
       { label: 'DOB', value: selectedMember.dob },
       { label: 'Address', value: selectedMember.address },
       { label: 'Country/Region', value: selectedMember.country_region },
+      { label: 'Ministry', value: selectedMember.ministry },
       { label: 'City', value: selectedMember.city },
+      { label: 'Zip/Postal Code', value: selectedMember.zip_postal_code },
+      { label: 'Mobile Phone', value: selectedMember.mobile_phone },
+      { label: 'Notes', value: selectedMember.notes },
       { label: "Physician's Name", value: selectedMember.physician_name },
-      { label: 'Mobile Phone', value: selectedMember.mobile_phone },
-      { label: 'Mobile Phone', value: selectedMember.mobile_phone },
-      { label: 'Mobile Phone', value: selectedMember.mobile_phone },
-      { label: 'Mobile Phone', value: selectedMember.mobile_phone },
-      { label: 'Mobile Phone', value: selectedMember.mobile_phone },
-      { label: 'Mobile Phone', value: selectedMember.mobile_phone },
+      { label: "Physician's Phone", value: selectedMember.physician_phone },
+      { label: 'Allergies', value: selectedMember.allergies },
+      { label: 'Medications', value: selectedMember.medications },
+      { label: 'Insurance Carrier', value: selectedMember.insurance_carrier },
+      { label: 'Insurance Number', value: selectedMember.insurance_number },
       // Add more fields as needed
     ];
 

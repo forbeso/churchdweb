@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import supabase from '../supabase';
 import { SupabaseContext } from '../SupabaseContext';
 import ConfirmDialog from '../confirmationDialog';
+import { toast } from 'react-toastify';
 
 import {
   Dialog,
@@ -92,13 +93,15 @@ export default function EditMemberDialog({
       setConfirmMsg(
         `Error updating ${selectedMember.first_name}'s information`,
       );
-      console.error('Error updating record:', error.message);
+      toast.error('Error updating record:', error.message);
     } else {
       setConfirmError(false);
       setConfirmMsg(
         `Successfully updated ${selectedMember.first_name}'s information`,
       );
-      console.log('Record updated successfully:', data);
+      toast.success(
+        `Successfully updated ${selectedMember.first_name}'s information`,
+      );
     }
 
     // Close the edit dialog regardless of success or failure
@@ -255,6 +258,7 @@ export default function EditMemberDialog({
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                type="number"
                 fullWidth
                 id="phone"
                 name="mobile_phone"
@@ -297,8 +301,10 @@ export default function EditMemberDialog({
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  type="number"
                   fullWidth
                   id="zip"
+                  name="zip_postal_code"
                   label="Zip/Postal Code"
                   placeholder="Enter 5 digit Zip"
                   variant="outlined"
@@ -310,7 +316,9 @@ export default function EditMemberDialog({
                 <TextField
                   fullWidth
                   id="notes"
+                  name="notes"
                   label="Notes"
+                  value={selectedMember.notes}
                   placeholder="Enter any notes related to this person"
                   variant="outlined"
                   onChange={handleEditOnChange}
@@ -384,17 +392,6 @@ export default function EditMemberDialog({
                   placeholder="Enter number"
                   variant="outlined"
                   value={selectedMember.insurance_number ?? ''}
-                  onChange={handleEditOnChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  id="city"
-                  label="City"
-                  placeholder="Enter city"
-                  variant="outlined"
-                  value={selectedMember.city ?? ''}
                   onChange={handleEditOnChange}
                 />
               </Grid>

@@ -85,6 +85,7 @@
     "react-router-dom": "^6.8.1",
     "react-scripts": "^5.0.1",
     "react-spinners": "^0.13.8",
+    "react-toastify": "^10.0.5",
     "sass": "^1.63.6",
     "web-vitals": "^3.3.2",
     "webpack-dev-server": "^4.15.1"

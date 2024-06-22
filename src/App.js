@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
 import Search from './search/index';
@@ -73,6 +75,16 @@ export default function App() {
             <Route path="/cdeck/settings" element={<Settings />} />
           </Route>
         </Routes>
+        <ToastContainer
+          position="top-right"
+          theme="colored"
+          autoClose={5000}
+          newestOnTop
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </SupabaseProvider>
     </Router>
   );

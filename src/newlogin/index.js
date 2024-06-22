@@ -6,12 +6,16 @@ import Label from '@mui/material/FormLabel';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import ChurchIcon from '../assets/churchicon';
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
+import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
+
 export default function NewLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [sessionData, setSessionData] = useState('');
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -19,6 +23,10 @@ export default function NewLogin() {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   async function signInWithEmail() {
@@ -62,13 +70,21 @@ export default function NewLogin() {
               Password
             </Label>
             <Input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               className="input mb-3"
               required
               value={password}
               onChange={(query) => handlePasswordChange(query)}
             />
+
+            <span onClick={toggleShowPassword} className="cursor-pointer">
+              {showPassword ? (
+                <VisibilityRoundedIcon style={{ color: '#f1c40f' }} />
+              ) : (
+                <VisibilityOffRoundedIcon />
+              )}
+            </span>
           </div>
           {loginError && (
             <div className="bg-danger p-2 mb-3  text-center rounded">
