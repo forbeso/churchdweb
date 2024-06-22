@@ -54,7 +54,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
 
           <List>
             <NavLink to="/cdeck/home" style={listStyle}>
-              <ListItemButton component="a" href="#">
+              <ListItemButton>
                 <ListItemIcon>
                   <ChurchIcon />
                 </ListItemIcon>
@@ -62,7 +62,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
               </ListItemButton>
             </NavLink>
             <NavLink to="/cdeck/search" style={listStyle}>
-              <ListItemButton component="a">
+              <ListItemButton>
                 <ListItemIcon>
                   <LayoutDashboardIcon />
                 </ListItemIcon>
@@ -71,7 +71,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
             </NavLink>
             <List component="div" disablePadding>
               <NavLink to="/cdeck/events" style={listStyle}>
-                <ListItemButton component="a" href="#" className="pl-4">
+                <ListItemButton className="pl-4">
                   <ListItemIcon>
                     <ActivityIcon />
                   </ListItemIcon>
@@ -79,7 +79,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
                 </ListItemButton>
               </NavLink>
               <NavLink to="/cdeck/dashboard" style={listStyle}>
-                <ListItemButton component="a" href="#">
+                <ListItemButton>
                   <ListItemIcon>
                     <LayoutDashboardIcon />
                   </ListItemIcon>
@@ -88,7 +88,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
               </NavLink>
             </List>
             <NavLink to="/cdeck/tithes" style={listStyle}>
-              <ListItemButton component="a" href="#">
+              <ListItemButton>
                 <ListItemIcon>
                   <DollarSignIcon />
                 </ListItemIcon>
@@ -96,7 +96,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
               </ListItemButton>
             </NavLink>
             <List component="div" disablePadding>
-              <ListItemButton component="a" href="#" className="pl-4">
+              <ListItemButton className="pl-4">
                 <ListItemIcon>
                   <FileTextIcon />
                 </ListItemIcon>
@@ -105,7 +105,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
             </List>
             <NavLink to="/cdeck/info" style={listStyle}>
               <List component="div" disablePadding>
-                <ListItemButton component="a" href="#" className="pl-4">
+                <ListItemButton className="pl-4">
                   <ListItemIcon>
                     <InfoOutlinedIcon />
                   </ListItemIcon>
@@ -115,7 +115,7 @@ export default function Newnav({ isNavOpen, toggleNav }) {
             </NavLink>
             <NavLink to="/cdeck/settings" style={listStyle}>
               <List component="div" disablePadding>
-                <ListItemButton component="a" href="#" className="pl-4">
+                <ListItemButton className="pl-4">
                   <ListItemIcon>
                     <SettingsIcon />
                   </ListItemIcon>

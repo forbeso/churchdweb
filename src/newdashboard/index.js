@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import supabase from '../supabase';
+import 'chartjs-adapter-moment';
+
 import {
   Chart as ChartJS,
   ArcElement,
