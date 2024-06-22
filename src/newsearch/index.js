@@ -194,7 +194,7 @@ export default function NewSearch() {
         ) : (
           sortedMembers.map((member) => (
             <Card
-              className="flex flex-col animate__animated animate__fadeIn cursor-pointer"
+              className="flex flex-col animate__animated animate__fadeIn cursor-pointer hover:border hover:border-[#0F1939]"
               key={member.member_id}
               onClick={() => handleSelectedMember(member)}
             >

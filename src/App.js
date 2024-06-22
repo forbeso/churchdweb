@@ -5,15 +5,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
-import Search from './search/index';
-import Login from './login/index';
-import Data from './data/index';
+
 import Land from './land/index';
 import Layout from './layout/index';
 import Info from './info/index';
 import { SupabaseProvider } from './SupabaseContext';
-import Activities from './activities';
-import TithesPage from './tithes';
 import NewLogin from './newlogin';
 import NewSearch from './newsearch';
 import NewTithes from './newtithes';
@@ -69,7 +65,6 @@ export default function App() {
             <Route path="/cdeck/info" element={<Info />} />
             <Route path="/cdeck/dashboard" element={<NewDashboard />} />
             <Route path="/cdeck/home" element={<Land />} />
-            <Route path="/cdeck/activities" element={<Activities />} />
             <Route path="/cdeck/tithes" element={<NewTithes />} />
             <Route path="/cdeck/events" element={<NewEvent />} />
             <Route path="/cdeck/settings" element={<Settings />} />

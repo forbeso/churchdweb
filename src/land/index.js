@@ -18,6 +18,7 @@ import CalendarIcon from '../assets/calendaricon';
 
 import heroImage from '../assets/avatarsgrid.gif';
 import dash from '../assets/web.jpg';
+import PhotoGrid from '../PhotoGrid';
 
 export default function Land() {
   const { session, updateSession } = useContext(SupabaseContext);
@@ -28,16 +29,16 @@ export default function Land() {
         <div className="container px-4 md:px-6">
           <div className="grid items-center gap-6 lg:grid-cols-[1fr_550px] lg:gap-12 xl:grid-cols-[1fr_650px]">
             <div className="flex flex-col justify-center space-y-4">
-              <div className="space-y-2">
+              <div className="space-y-2 animate__animated animate__fadeIn">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl ">
-                  Welcome to Churchdeck
+                  Welcome to Abundant Life Ministry's Churchdeck
                 </h1>
-                <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 animate__animated animate__fadeIn">
+                <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 animate__animated animate__fadeInUp">
                   Manage your church's membership, events, and reporting all in
                   one place.
                 </p>
               </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+              <div className="flex flex-col gap-2 min-[400px]:flex-row ">
                 <Link
                   className="inline-flex h-10 items-center justify-center rounded-md bg-dark px-8 text-sm font-medium text-white shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
                   href="#"
@@ -52,12 +53,13 @@ export default function Land() {
                 </Link>
               </div>
             </div>
-            <img
+            {/* <img
               alt="Hero"
               className="mx-auto aspect-[4/3] overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last animate__animated animate__fadeIn"
               src={heroImage}
               width={350}
-            />
+            /> */}
+            <PhotoGrid></PhotoGrid>
           </div>
         </div>
       </section>

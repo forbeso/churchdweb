@@ -105,6 +105,7 @@ export default function EditMemberDialog({
     }
 
     // Close the edit dialog regardless of success or failure
+    handleCloseInfoDialog();
     handleToggleEditMember();
   };
 

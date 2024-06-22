@@ -3,7 +3,6 @@ import { Outlet, useNavigate, Link } from 'react-router-dom';
 
 import supabase from '../supabase';
 import { SupabaseContext } from '../SupabaseContext';
-import Nav from '../nav';
 import './style.scss';
 import ChurchIcon from '../assets/churchicon';
 import Newnav from '../newnav';

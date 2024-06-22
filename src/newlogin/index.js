@@ -10,8 +10,8 @@ import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
 
 export default function NewLogin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('odainef@gmail.com');
+  const [password, setPassword] = useState('testing123');
   const [sessionData, setSessionData] = useState('');
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
