@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, ChangeEvent } from 'react';
 import supabase from '../supabase';
 
 import { SupabaseContext } from '../SupabaseContext';
+import { toast } from 'react-toastify';
 
 import {
   Dialog,
@@ -64,6 +65,7 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
   const [addResponseMessage, setAddResponseMessage] = useState('');
   const [addSuccess, setAddSuccess] = useState(false);
   const [seeMoreFormFields, setSeeMoreFormFields] = useState(false);
+  const [duplicateError, setDuplicateError] = useState('');
 
   function createUniqueID(fn, ln) {
     if (!memberId) {
@@ -182,6 +184,10 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
           `It seems you have already added ${firstName} ${lastName} to your church`,
         );
       }
+
+      addResponseMessage && toast.success(addResponseMessage);
+      duplicateError && toast.error(duplicateError);
+      addError && toast.error(addResponseMessage);
     }
   };
 
@@ -459,7 +465,6 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
         </form>
       </DialogContent>
       <DialogActions>
-        <p>{addResponseMessage}</p>
         <Button
           type="submit"
           variant="contained"
