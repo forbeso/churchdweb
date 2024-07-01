@@ -143,6 +143,7 @@ export default function NewSearch() {
         <AddNewMemberDialog
           handleToggle={handleToggleNewMemberDialog}
           memberData={memberData}
+          ministryList={ministryList}
         ></AddNewMemberDialog>
       )}
 

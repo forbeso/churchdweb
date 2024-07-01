@@ -24,7 +24,11 @@ import {
   ListItemText,
 } from '@mui/material';
 
-export default function AddNewMemberDialog({ handleToggle, memberData }) {
+export default function AddNewMemberDialog({
+  handleToggle,
+  memberData,
+  ministryList,
+}) {
   const { session } = useContext(SupabaseContext);
 
   const [lastName, setLastName] = useState('');
@@ -50,7 +54,7 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
   const [medications, setMedications] = useState('');
   const [insuranceCarrier, setInsuranceCarrier] = useState('');
   const [insuranceNumber, setInsuranceNumber] = useState('');
-  const [type, setType] = useState('');
+  const [type, setType] = useState(['']);
 
   const [firstNameError, setFirstNameError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
@@ -274,11 +278,38 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
 
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <Select value={sex} onChange={handleSelectSex} fullWidth>
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
-              </Select>
+              <FormControl fullWidth>
+                <InputLabel id="ministry-label">Type</InputLabel>
+                <Select
+                  label="type"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  fullWidth
+                >
+                  <MenuItem value="Member">Member</MenuItem>
+                  <MenuItem value="Visitor">Visitor</MenuItem>
+                </Select>
+              </FormControl>
+              {/* {sexError && (
+                <p className="text-danger">This field is required</p>
+              )} */}
+            </Grid>
+          </Grid>
 
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id="ministry-label">Sex</InputLabel>
+                <Select
+                  value={sex}
+                  onChange={handleSelectSex}
+                  fullWidth
+                  label="Sex"
+                >
+                  <MenuItem value="male">Male</MenuItem>
+                  <MenuItem value="female">Female</MenuItem>
+                </Select>
+              </FormControl>
               {sexError && (
                 <p className="text-danger">This field is required</p>
               )}
@@ -338,15 +369,25 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
           {seeMoreFormFields && (
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <Select
-                  value={ministry}
-                  onChange={(e) => setMinistry(e.target.value)}
-                  fullWidth
-                  label="ministry"
-                >
-                  <MenuItem value="preaching">Preaching</MenuItem>
-                  <MenuItem value=""></MenuItem>
-                </Select>
+                <FormControl fullWidth>
+                  <InputLabel id="ministry-label">Ministry</InputLabel>
+                  <Select
+                    labelId="ministry-label"
+                    label="Ministry"
+                    id="ministry"
+                    name="ministry"
+                    value={ministry}
+                    onChange={(e) => setMinistry(e.target.value)}
+                  >
+                    <MenuItem value="">Select Ministry</MenuItem>
+                    {ministryList &&
+                      ministryList.map((ministry, index) => (
+                        <MenuItem key={index} value={ministry.name}>
+                          {ministry.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -359,16 +400,20 @@ export default function AddNewMemberDialog({ handleToggle, memberData }) {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Select
-                  value={stateProvince}
-                  onChange={(e) => setStateProvince(e.target.value)}
-                  fullWidth
-                  label="state/province"
-                >
-                  <MenuItem value="NY">New York</MenuItem>
-                  <MenuItem value="Fl">Florida</MenuItem>
-                  <MenuItem value="CA">California</MenuItem>
-                </Select>
+                <FormControl fullWidth>
+                  <InputLabel id="ministry-label">State</InputLabel>
+
+                  <Select
+                    value={stateProvince}
+                    onChange={(e) => setStateProvince(e.target.value)}
+                    fullWidth
+                    label="state/province"
+                  >
+                    <MenuItem value="NY">New York</MenuItem>
+                    <MenuItem value="Fl">Florida</MenuItem>
+                    <MenuItem value="CA">California</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField

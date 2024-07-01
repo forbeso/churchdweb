@@ -30,6 +30,7 @@ export default function ConfirmDialog({
     const formFields = [
       { label: 'First Name', value: selectedMember.first_name },
       { label: 'Last Name', value: selectedMember.last_name },
+      { label: 'Sex', value: selectedMember.sex },
       { label: 'Email', value: selectedMember.email },
       { label: 'DOB', value: selectedMember.dob },
       { label: 'Address', value: selectedMember.address },

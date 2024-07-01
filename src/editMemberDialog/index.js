@@ -193,6 +193,27 @@ export default function EditMemberDialog({
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
+                <InputLabel id="ministry-label">Type</InputLabel>
+                <Select
+                  label="type"
+                  name="type"
+                  value={selectedMember.type ?? ''}
+                  onChange={handleEditOnChange}
+                  fullWidth
+                >
+                  <MenuItem value="Member">Member</MenuItem>
+                  <MenuItem value="Visitor">Visitor</MenuItem>
+                </Select>
+              </FormControl>
+              {/* {sexError && (
+                <p className="text-danger">This field is required</p>
+              )} */}
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
                 <InputLabel id="sex-label">Sex</InputLabel>
                 <Select
                   labelId="sex-label"
