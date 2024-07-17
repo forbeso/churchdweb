@@ -209,6 +209,28 @@ export default function EditMemberDialog({
                 <p className="text-danger">This field is required</p>
               )} */}
             </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id="status-label">Status</InputLabel>
+                <Select
+                  label="status"
+                  name="status"
+                  value={selectedMember.status ?? ''}
+                  onChange={handleEditOnChange}
+                  fullWidth
+                >
+                  <MenuItem value="Active">Active</MenuItem>
+                  <MenuItem value="Inactive">Inactive</MenuItem>
+                  <MenuItem value="Left Church">Left Church</MenuItem>
+                  <MenuItem value="Migrated">Migrated</MenuItem>
+                  <MenuItem value="Deceased">Deceased</MenuItem>
+                </Select>
+              </FormControl>
+              {/* {sexError && (
+                <p className="text-danger">This field is required</p>
+              )} */}
+            </Grid>
           </Grid>
 
           <Grid container spacing={2}>

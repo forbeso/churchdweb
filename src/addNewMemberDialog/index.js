@@ -294,6 +294,26 @@ export default function AddNewMemberDialog({
                 <p className="text-danger">This field is required</p>
               )} */}
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id="status-label">Status</InputLabel>
+                <Select
+                  label="type"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  fullWidth
+                >
+                  <MenuItem value="Active">Active</MenuItem>
+                  <MenuItem value="Inactive">Inactive</MenuItem>
+                  <MenuItem value="Left Church">Left Church</MenuItem>
+                  <MenuItem value="Migrated">Migrated</MenuItem>
+                  <MenuItem value="Deceased">Deceased</MenuItem>
+                </Select>
+              </FormControl>
+              {/* {sexError && (
+                <p className="text-danger">This field is required</p>
+              )} */}
+            </Grid>
           </Grid>
 
           <Grid container spacing={2}>
