@@ -214,16 +214,6 @@ export default function AddNewMemberDialog({
           Fill out the form to add a new member to the church.
         </p>
         <form className="space-y-4 mt-3">
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              id="member_id"
-              variant="outlined"
-              value={memberId}
-              helperText={'Click to generate Member ID.'}
-              onFocus={() => createUniqueID(firstName, lastName)}
-            />
-          </Grid>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -248,6 +238,17 @@ export default function AddNewMemberDialog({
                 onChange={(e) => setLastName(e.target.value)}
               />
             </Grid>
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              id="member_id"
+              variant="outlined"
+              value={memberId}
+              helperText={'Click to generate Member ID.'}
+              onFocus={() => createUniqueID(firstName, lastName)}
+            />
           </Grid>
 
           <Grid container spacing={2}>
