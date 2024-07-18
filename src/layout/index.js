@@ -1,9 +1,16 @@
 import React, { useContext, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, Link } from 'react-router-dom';
+
 import supabase from '../supabase';
 import { SupabaseContext } from '../SupabaseContext';
-import Nav from '../nav';
 import './style.scss';
+import ChurchIcon from '../assets/churchicon';
+import Newnav from '../newnav';
+import MenuIcon from '@mui/icons-material/Menu';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import Avatar from 'boring-avatars';
+import { stripEmail } from '../utils/utils';
 
 function Layout({ children }) {
   const { session, updateSession } = useContext(SupabaseContext);
@@ -14,10 +21,6 @@ function Layout({ children }) {
     setIsNavOpen(!isNavOpen);
   };
 
-  const closeNav = () => {
-    setIsNavOpen(false);
-  };
-
   const signOutUser = async () => {
     if (session) {
       const { error } = await supabase.auth.signOut();
@@ -26,56 +29,34 @@ function Layout({ children }) {
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row h-100">
-        <div
-          className={`col-md-3 col-lg-2 pl-0 pr-0 ${
-            isNavOpen ? 'd-block d-md-none' : 'd-none d-md-block'
-          }`}
-        >
-          <Nav closeNav={closeNav} />
-        </div>
-
-        <div
-          className="col-md-9 col-lg-10 overflow"
-          style={{ backgroundColor: '#f4f7ff' }}
-        >
-          <div className="mt-3 mb-5 d-flex justify-content-between">
-            <div className="d-block d-md-none">
-              <button className="btn nav-button" onClick={toggleNav}>
-                {isNavOpen ? (
-                  'Close'
-                ) : (
-                  <span className="material-icons-outlined">menu</span>
-                )}
-              </button>
-            </div>
-            <div className="d-flex flex-column align-items-end">
-              <p></p>
-              <strong>
-                <p className="text-dark">Hi {session && session.user.email}</p>
-              </strong>
-            </div>
-
-            <div className="">
-              <strong className="cursor-pointer">
-                <button
-                  type="button"
-                  className="btn logout border"
-                  onClick={signOutUser}
-                >
-                  <strong>Sign Out</strong>
-                </button>
-              </strong>
-            </div>
+    <div className="flex flex-col h-screen ">
+      <header className="flex flex-row items-center justify-between bg-white px-6 py-4 border-gray-800">
+        <div className="flex items-center gap-4">
+          <div>
+            <MenuIcon onClick={toggleNav} className="cursor-pointer"></MenuIcon>
           </div>
-
-          <main onClick={closeNav}>
-            {children}
-            <Outlet />
-          </main>
+          <Link className="flex items-center gap-2" to="/cdeck/home">
+            <ChurchIcon className="h-6 w-6 text-dark " />
+            <span className="text-lg font-semibold text-dark ">Churchdeck</span>
+          </Link>
         </div>
-      </div>
+        <div className="flex items-center gap-2">
+          <NotificationsNoneIcon />
+          {session && stripEmail(session.user.email)}
+          <Avatar
+            size={40}
+            name="Maria Mitchell"
+            variant="marble"
+            colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
+          />
+        </div>
+      </header>
+
+      {isNavOpen && <Newnav isNavOpen={isNavOpen} toggleNav={toggleNav} />}
+      <main className="flex-1 overflow-y-auto bg-gray-100 p-6">
+        {children}
+        <Outlet />
+      </main>
     </div>
   );
 }
