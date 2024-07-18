@@ -33,6 +33,8 @@ export default function ConfirmDialog({
       { label: 'Sex', value: selectedMember.sex },
       { label: 'Email', value: selectedMember.email },
       { label: 'DOB', value: selectedMember.dob },
+      { label: 'Type', value: selectedMember.type },
+      { label: 'Status', value: selectedMember.status },
       { label: 'Address', value: selectedMember.address },
       { label: 'Country/Region', value: selectedMember.country_region },
       { label: 'Ministry', value: selectedMember.ministry },
