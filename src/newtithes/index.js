@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import supabase from '../supabase';
-import FilterAndSortMenu from '../filtersearch';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -8,15 +7,10 @@ import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
 import Avatar from 'boring-avatars';
 import Button from '@mui/material/Button';
-import {
-  TextField,
-  CircularProgress,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from '@mui/material';
+import { TextField, CircularProgress } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function NewTithes() {
   const [members, setMembers] = useState([]);
@@ -191,14 +185,36 @@ export default function NewTithes() {
                     </TableCell>
                     <TableCell>{member.type}</TableCell>
                     <TableCell>{member.status}</TableCell>
-                    {[
-                      '2024-07-07',
-                      '2024-07-14',
-                      '2024-07-21',
-                      '2024-07-28',
-                    ].map((date) => (
+                    {['2024-07-07'].map((date) => (
                       <React.Fragment key={date}>
-                        <TableCell>{date}</TableCell>
+                        <TableCell>
+                          <DatePicker
+                            placeholderText="Date"
+                            selected={
+                              tithes.find(
+                                (t) =>
+                                  t.member_id === member.id && t.date === date,
+                              )?.date
+                                ? new Date(
+                                    tithes.find(
+                                      (t) =>
+                                        t.member_id === member.id &&
+                                        t.date === date,
+                                    ).date,
+                                  )
+                                : null
+                            }
+                            onChange={(date) =>
+                              handleTitheChange(
+                                member.id,
+                                date ? date.toISOString().split('T')[0] : date,
+                                'date',
+                                date ? date.toISOString().split('T')[0] : '',
+                              )
+                            }
+                            dateFormat="yyyy-MM-dd"
+                          />
+                        </TableCell>
                         <TableCell>
                           <TextField
                             type="number"
