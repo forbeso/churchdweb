@@ -128,6 +128,16 @@ export default function EditMemberDialog({
           Fill out the form to edit member information.
         </p>
         <form className="space-y-4 mt-3">
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              id="member_id"
+              name="member_id"
+              variant="outlined"
+              value={selectedMember.member_id ?? ''}
+              helperText={'Unique Member ID.'}
+            />
+          </Grid>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField

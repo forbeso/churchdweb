@@ -1,37 +1,33 @@
 import { useState } from 'react';
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Typography,
-  TextareaAutosize as Textarea,
-} from '@mui/material';
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-
+import { Card, Typography, OutlinedInput } from '@mui/material';
 import { Button } from '@mui/base/Button';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Label from '@mui/material/FormLabel';
+import supabase from '../supabase';
 
 export default function CalendarChooseDate({ eventTypes }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [eventTitle, setEventTitle] = useState('');
   const [eventDescription, setEventDescription] = useState('');
   const [eventLocation, setEventLocation] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const [locationError, setLocationError] = useState('');
+  const [dateError, setDateError] = useState('');
+
   const handlePrevMonth = () => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
     );
   };
+
   const handleNextMonth = () => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
     );
   };
+
   const daysInMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
@@ -47,32 +43,76 @@ export default function CalendarChooseDate({ eventTypes }) {
     currentDate.getMonth() + 1,
     0,
   ).getDay();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+
   const handleDateClick = (date) => {
     setSelectedDate(date);
+    setDateError(''); // Clear date error when a date is selected
   };
 
   const handleEventTitleChange = (e) => {
     setEventTitle(e.target.value);
+    setTitleError(''); // Clear title error on change
   };
+
   const handleEventDescriptionChange = (e) => {
     setEventDescription(e.target.value);
+    setDescriptionError(''); // Clear description error on change
   };
+
   const handleEventLocationChange = (e) => {
     setEventLocation(e.target.value);
+    setLocationError(''); // Clear location error on change
   };
-  const handleEventSubmit = () => {
-    console.log('Event Title:', eventTitle);
-    console.log('Event Description:', eventDescription);
-    console.log('Event Location:', eventLocation);
-    console.log('Event Date:', selectedDate);
+
+  const handleEventSubmit = async () => {
+    let isValid = true;
+
+    if (!eventTitle) {
+      setTitleError('Event title is required');
+      isValid = false;
+    }
+    if (!eventDescription) {
+      setDescriptionError('Event description is required');
+      isValid = false;
+    }
+    if (!eventLocation) {
+      setLocationError('Event location is required');
+      isValid = false;
+    }
+    if (!selectedDate) {
+      setDateError('Event date is required');
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    const isoDate = selectedDate.toISOString().split('T')[0];
+
+    const { data, error } = await supabase.from('events').insert([
+      {
+        event_type: eventTitle,
+        event_descr: eventDescription,
+        location: eventLocation,
+        start_date: isoDate,
+        end_date: isoDate,
+      },
+    ]);
+
+    if (error) {
+      console.error('Error adding event:', error);
+    } else {
+      console.log('Event added successfully:', data);
+    }
+
     setEventTitle('');
     setEventDescription('');
     setEventLocation('');
+    setSelectedDate(new Date()); // Reset date
   };
+
   return (
     <div className="w-full md:flex md:justify-center">
-      <Card className="bg-white rounded-lg shadow-lg p-6 ">
+      <Card className="bg-white rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="text-lg font-semibold">
             {currentDate.toLocaleString('default', { month: 'long' })}{' '}
@@ -81,13 +121,13 @@ export default function CalendarChooseDate({ eventTypes }) {
           <div className="flex items-center">
             <Button
               onClick={handlePrevMonth}
-              className="p-2 rounded-full hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-gray-950 "
+              className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-950"
             >
               <ChevronLeftIcon className="w-5 h-5" />
             </Button>
             <Button
               onClick={handleNextMonth}
-              className="p-2 rounded-full hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-gray-950  ml-2"
+              className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-950 ml-2"
             >
               <ChevronRightIcon className="w-5 h-5" />
             </Button>
@@ -123,11 +163,11 @@ export default function CalendarChooseDate({ eventTypes }) {
               <Button
                 key={index}
                 onClick={() => handleDateClick(date)}
-                className={`text-center rounded-full p-2 hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-gray-950  ${
+                className={`text-center rounded-full p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-950 ${
                   isToday
-                    ? 'bg-primary text-white  dark:text-gray-950'
+                    ? 'bg-blue-500 text-white'
                     : isSelected
-                    ? 'bg-gray-950 text-white '
+                    ? 'bg-blue-500 text-white'
                     : 'bg-gray-200'
                 }`}
               >
@@ -143,24 +183,24 @@ export default function CalendarChooseDate({ eventTypes }) {
           ))}
         </div>
       </Card>
-      <div className="flex bg-white dark:bg-gray-950 rounded-lg shadow-lg p-6  md:ml-3">
+      <div className="flex bg-white dark:bg-gray-950 rounded-lg shadow-lg p-6 md:ml-3">
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="event-title" style={{ fontWeight: 500 }}>
               Event Title
             </Label>
-            {/* <InputLabel>Event Title</InputLabel> */}
-            <Select
-              labelId="dropdown-label"
-              value={selectedOption}
-              onChange={handleChange}
-            >
-              {eventTypes.map((event) => (
-                <MenuItem key={event.event_id} value={event.event_id}>
-                  {event.event_type}
-                </MenuItem>
-              ))}
-            </Select>
+            <OutlinedInput
+              id="event-title"
+              value={eventTitle}
+              onChange={handleEventTitleChange}
+              placeholder="Enter event title"
+              error={!!titleError}
+            />
+            {titleError && (
+              <Typography color="error" variant="body2">
+                {titleError}
+              </Typography>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="event-description">Event Description</Label>
@@ -170,7 +210,13 @@ export default function CalendarChooseDate({ eventTypes }) {
               onChange={handleEventDescriptionChange}
               placeholder="Enter event description"
               rows={3}
+              error={!!descriptionError}
             />
+            {descriptionError && (
+              <Typography color="error" variant="body2">
+                {descriptionError}
+              </Typography>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="event-location">Event Location</Label>
@@ -179,7 +225,13 @@ export default function CalendarChooseDate({ eventTypes }) {
               value={eventLocation}
               onChange={handleEventLocationChange}
               placeholder="Enter event location"
+              error={!!locationError}
             />
+            {locationError && (
+              <Typography color="error" variant="body2">
+                {locationError}
+              </Typography>
+            )}
           </div>
           <Button
             onClick={handleEventSubmit}
@@ -187,6 +239,11 @@ export default function CalendarChooseDate({ eventTypes }) {
           >
             Add Event
           </Button>
+          {dateError && (
+            <Typography color="error" variant="body2">
+              {dateError}
+            </Typography>
+          )}
         </div>
       </div>
     </div>
