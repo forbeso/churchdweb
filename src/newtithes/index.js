@@ -43,7 +43,7 @@ export default function NewTithes() {
     fetchData();
   }, [sortField, sortOrder, page, pageSize, filter]);
 
-  const handleTitheChange = (memberId, date, field, value) => {
+  const handleTitheChange = (memberId, field, value, date) => {
     setTithes((prevTithes) => {
       const newTithes = [...prevTithes];
       const titheIndex = newTithes.findIndex(
@@ -126,10 +126,6 @@ export default function NewTithes() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          {/* <FilterAndSortMenu
-            filters={['Everyone', 'Members', 'Visitors']}
-            onFilterChange={handleFilterChange}
-          /> */}
         </div>
       </div>
       <div className="bg-white rounded-lg shadow-md overflow-hidden animate__animated animate__fadeInUp">
@@ -185,76 +181,69 @@ export default function NewTithes() {
                     </TableCell>
                     <TableCell>{member.type}</TableCell>
                     <TableCell>{member.status}</TableCell>
-                    {['2024-07-07'].map((date) => (
-                      <React.Fragment key={date}>
-                        <TableCell>
-                          <DatePicker
-                            placeholderText="Date"
-                            selected={
-                              tithes.find(
-                                (t) =>
-                                  t.member_id === member.id && t.date === date,
-                              )?.date
-                                ? new Date(
-                                    tithes.find(
-                                      (t) =>
-                                        t.member_id === member.id &&
-                                        t.date === date,
-                                    ).date,
-                                  )
-                                : null
-                            }
-                            onChange={(date) =>
-                              handleTitheChange(
-                                member.id,
-                                date ? date.toISOString().split('T')[0] : date,
-                                'date',
-                                date ? date.toISOString().split('T')[0] : '',
+                    <TableCell>
+                      <DatePicker
+                        placeholderText="Date"
+                        selected={
+                          tithes.find((t) => t.member_id === member.id)?.date
+                            ? new Date(
+                                tithes.find(
+                                  (t) => t.member_id === member.id,
+                                ).date,
                               )
-                            }
-                            dateFormat="yyyy-MM-dd"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <TextField
-                            type="number"
-                            value={
-                              tithes.find(
-                                (t) =>
-                                  t.member_id === member.id && t.date === date,
-                              )?.amount_jmd || ''
-                            }
-                            onChange={(e) =>
-                              handleTitheChange(
-                                member.id,
-                                date,
-                                'amount_jmd',
-                                e.target.value,
-                              )
-                            }
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <TextField
-                            type="number"
-                            value={
-                              tithes.find(
-                                (t) =>
-                                  t.member_id === member.id && t.date === date,
-                              )?.amount_usd || ''
-                            }
-                            onChange={(e) =>
-                              handleTitheChange(
-                                member.id,
-                                date,
-                                'amount_usd',
-                                e.target.value,
-                              )
-                            }
-                          />
-                        </TableCell>
-                      </React.Fragment>
-                    ))}
+                            : null
+                        }
+                        onChange={(date) =>
+                          handleTitheChange(
+                            member.id,
+                            'date',
+                            date ? date.toISOString().split('T')[0] : '',
+                            date ? date.toISOString().split('T')[0] : '',
+                          )
+                        }
+                        dateFormat="yyyy-MM-dd"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        type="number"
+                        value={
+                          tithes.find(
+                            (t) => t.member_id === member.id && t.date,
+                          )?.amount_jmd || ''
+                        }
+                        onChange={(e) =>
+                          handleTitheChange(
+                            member.id,
+                            'amount_jmd',
+                            e.target.value,
+                            tithes.find(
+                              (t) => t.member_id === member.id && t.date,
+                            )?.date,
+                          )
+                        }
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        type="number"
+                        value={
+                          tithes.find(
+                            (t) => t.member_id === member.id && t.date,
+                          )?.amount_usd || ''
+                        }
+                        onChange={(e) =>
+                          handleTitheChange(
+                            member.id,
+                            'amount_usd',
+                            e.target.value,
+                            tithes.find(
+                              (t) => t.member_id === member.id && t.date,
+                            )?.date,
+                          )
+                        }
+                      />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -270,7 +259,12 @@ export default function NewTithes() {
         )}
       </div>
       <div className="flex items-center justify-between mt-8">
-        <Button size="sm" variant="outline" onClick={handleSave}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleSave}
+          sx={{ backgroundColor: '#098F8F', color: 'white' }}
+        >
           Save
         </Button>
       </div>
