@@ -76,31 +76,6 @@ export default function Settings() {
           <Button>Save Changes</Button>
         </CardActionArea>
       </Card>
-      <Card>
-        <CardHeader
-          title="Privacy"
-          subheader="Manage your privacy settings."
-        ></CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="public-profile" />
-              <label htmlFor="public-profile">Public Profile</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="share-data" />
-              <label htmlFor="share-data">Share Data with Third Parties</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="receive-emails" />
-              <label htmlFor="receive-emails">Receive Promotional Emails</label>
-            </div>
-          </div>
-        </CardContent>
-        <CardActionArea className="border-t p-3">
-          <Button>Save Changes</Button>
-        </CardActionArea>
-      </Card>
     </div>
   );
 }

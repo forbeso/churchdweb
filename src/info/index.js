@@ -1,20 +1,64 @@
-import React, { useEffect, useState, useContext } from 'react';
-
+import React, { useState, useEffect, useContext } from 'react';
 import supabase from '../supabase';
 import Button from '@mui/material/Button';
 import { SupabaseContext } from '../SupabaseContext';
-import church from '../assets/church.png';
 import {
+  TextField,
   Card,
   CardContent,
   CardActionArea,
   CardHeader,
-  Typography as CardTitle,
+  Typography,
 } from '@mui/material';
 import './style.scss';
 
 function Info() {
-  const { session, updateSession } = useContext(SupabaseContext);
+  const { session } = useContext(SupabaseContext);
+  const [churchDetails, setChurchDetails] = useState({
+    name: '',
+    address: '',
+    phone: '',
+    email: '',
+  });
+
+  useEffect(() => {
+    const fetchChurchDetails = async () => {
+      const { data, error } = await supabase
+        .from('church_details')
+        .select('*')
+        .eq('id', 1) // Assuming you are using 'id' to fetch the details. Adjust as necessary.
+        .single();
+
+      if (error) {
+        console.error('Error fetching church details:', error);
+      } else {
+        setChurchDetails(data);
+      }
+    };
+
+    fetchChurchDetails();
+  }, []);
+
+  const handleChange = (field, value) => {
+    setChurchDetails((prevDetails) => ({
+      ...prevDetails,
+      [field]: value,
+    }));
+  };
+
+  const handleSaveChanges = async () => {
+    const { name, address, phone, email } = churchDetails;
+
+    const { error } = await supabase
+      .from('church_details')
+      .upsert({ id: 1, name, address, phone, email }); // Adjust as necessary.
+
+    if (error) {
+      console.error('Error updating church details:', error);
+    } else {
+      alert('Church details saved successfully');
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -28,39 +72,51 @@ function Info() {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-between">
                 <span>Church Name</span>
-                <Button size="icon" variant="ghost">
-                  <PenIcon className="h-5 w-5" />
-                  <span className="sr-only">Edit Church Name</span>
-                </Button>
+                <TextField
+                  value={churchDetails.name}
+                  onChange={(e) => handleChange('name', e.target.value)}
+                  variant="outlined"
+                  size="small"
+                />
               </div>
               <div className="flex items-center justify-between">
                 <span>Address</span>
-                <Button size="icon" variant="ghost">
-                  <PenIcon className="h-5 w-5" />
-                  <span className="sr-only">Edit Address</span>
-                </Button>
+                <TextField
+                  value={churchDetails.address}
+                  onChange={(e) => handleChange('address', e.target.value)}
+                  variant="outlined"
+                  size="small"
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-between">
                 <span>Phone</span>
-                <Button size="icon" variant="ghost">
-                  <PenIcon className="h-5 w-5" />
-                  <span className="sr-only">Edit Phone</span>
-                </Button>
+                <TextField
+                  value={churchDetails.phone}
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  variant="outlined"
+                  size="small"
+                />
               </div>
               <div className="flex items-center justify-between">
                 <span>Email</span>
-                <Button size="icon" variant="ghost">
-                  <PenIcon className="h-5 w-5" />
-                  <span className="sr-only">Edit Email</span>
-                </Button>
+                <TextField
+                  value={churchDetails.email}
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  variant="outlined"
+                  size="small"
+                />
               </div>
             </div>
           </div>
         </CardContent>
         <CardActionArea className="p-3">
-          <Button variant="outlined" className="bg-dark text-white">
+          <Button
+            variant="outlined"
+            className="bg-dark text-white"
+            onClick={handleSaveChanges}
+          >
             Save Changes
           </Button>
         </CardActionArea>
@@ -68,6 +124,7 @@ function Info() {
     </div>
   );
 }
+
 export default Info;
 
 function PenIcon(props) {
