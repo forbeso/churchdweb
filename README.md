@@ -11,5 +11,3 @@ ChurchDeck is a church membership web application built using React. It provides
 - **User Roles and Permissions:** Assign different roles and permissions to church administrators.
 - **Responsive Design:** Ensure a seamless experience across different devices and screen sizes.
 
-![churchdeck landing](https://user-images.githubusercontent.com/65794818/255422948-3e750e41-be80-4cd5-85ca-02b63019dc7c.png)
-![churchdeck dashboard mobile](https://user-images.githubusercontent.com/65794818/255423222-50504117-30c6-4686-b513-5b99af677100.png)
