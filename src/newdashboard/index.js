@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import supabase from '../supabase';
 import 'chartjs-adapter-moment';
+import { styled } from '@mui/material/styles';
 
 import {
   Chart as ChartJS,
@@ -30,9 +31,47 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
-import { Card, CardHeader, CardContent, Typography } from '@mui/material';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  Typography,
+  Box,
+  Container,
+  Grid,
+  Paper,
+  IconButton,
+} from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 import Avatar from 'boring-avatars';
+
+// Custom styled components for modern UI
+const StyledCard = styled(Card)(({ theme }) => ({
+  borderRadius: 16,
+  transition: '0.3s',
+  boxShadow: '0 8px 40px -12px rgba(0,0,0,0.1)',
+  '&:hover': {
+    boxShadow: '0 16px 70px -12.125px rgba(0,0,0,0.2)',
+  },
+}));
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[100],
+  '&:hover': {
+    backgroundColor: theme.palette.grey[200],
+  },
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.grey[200]}`,
+}));
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  borderRadius: 16,
+  padding: theme.spacing(3),
+  height: '100%',
+}));
 
 export default function NewDashboard() {
   const { session, updateSession } = useContext(SupabaseContext);

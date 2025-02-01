@@ -195,11 +195,50 @@ export default function NewSearch() {
         ) : (
           sortedMembers.map((member) => (
             <Card
-              className="flex flex-col animate__animated animate__fadeIn cursor-pointer hover:border hover:border-2 hover:border-[#516AC8]"
+              className="flex flex-col animate__animated animate__fadeIn cursor-pointer hover:border hover:border-2 hover:border-[#516AC8] relative"
               key={member.member_id}
-              onClick={() => handleSelectedMember(member)}
             >
-              <div className="flex items-center gap-4 p-4">
+              <div className="absolute top-2 right-2 z-10">
+                <Button
+                  size="small"
+                  className="text-white"
+                  style={{
+                    backgroundColor: '#ac2626',
+                    minWidth: '20px',
+                    padding: '2px',
+                  }}
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    if (
+                      window.confirm(
+                        'Are you sure you want to delete this member?',
+                      )
+                    ) {
+                      const { error } = await supabase
+                        .from(process.env.REACT_APP_MEMBERVIS_TABLE)
+                        .delete()
+                        .eq('member_id', member.member_id);
+
+                      if (error) {
+                        console.error('Error deleting member:', error);
+                      } else {
+                        // Remove member from local state
+                        setMemberData(
+                          memberData.filter(
+                            (m) => m.member_id !== member.member_id,
+                          ),
+                        );
+                      }
+                    }
+                  }}
+                >
+                  X
+                </Button>
+              </div>
+              <div
+                className="flex items-center gap-4 p-4"
+                onClick={() => handleSelectedMember(member)}
+              >
                 <Avatar
                   size={40}
                   name={member.member_id}
