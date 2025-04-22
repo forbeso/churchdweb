@@ -561,7 +561,7 @@ SelectItem.displayName = "SelectItem"
 export default function TithesOfferings() {
   // Initialize Supabase client
   const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || ""
-  const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY || ""
+  const supabaseKey = process.env.REACT_APP_SUPABASE_KEY || ""
   const supabase = createClient(supabaseUrl, supabaseKey)
 
   const [members, setMembers] = useState([])
