@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState, useEffect } from "react"
 import { createClient } from "@supabase/supabase-js"
 import { format } from "date-fns"
@@ -11,7 +13,17 @@ function cn(...inputs) {
 
 // Icons (simplified versions)
 const CalendarIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
     <line x1="16" x2="16" y1="2" y2="6"></line>
     <line x1="8" x2="8" y1="2" y2="6"></line>
@@ -20,21 +32,51 @@ const CalendarIcon = () => (
 )
 
 const SearchIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="11" cy="11" r="8"></circle>
     <path d="m21 21-4.3-4.3"></path>
   </svg>
 )
 
 const DollarSignIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <line x1="12" x2="12" y1="2" y2="22"></line>
     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
   </svg>
 )
 
 const SaveIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
     <polyline points="17 21 17 13 7 13 7 21"></polyline>
     <polyline points="7 3 7 8 15 8"></polyline>
@@ -42,7 +84,17 @@ const SaveIcon = () => (
 )
 
 const FileTextIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
     <polyline points="14 2 14 8 20 8"></polyline>
     <line x1="16" x2="8" y1="13" y2="13"></line>
@@ -52,13 +104,33 @@ const FileTextIcon = () => (
 )
 
 const CheckIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <polyline points="20 6 9 17 4 12"></polyline>
   </svg>
 )
 
 const ChevronDownIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="m6 9 6 6 6-6"></path>
   </svg>
 )
@@ -87,7 +159,7 @@ const Button = React.forwardRef(({ className, variant = "default", size = "defau
         "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
         variants[variant],
         sizes[size],
-        className
+        className,
       )}
       ref={ref}
       {...props}
@@ -104,7 +176,7 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
       type={type}
       className={cn(
         "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className
+        className,
       )}
       ref={ref}
       {...props}
@@ -114,32 +186,21 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
 Input.displayName = "Input"
 
 const Card = ({ className, ...props }) => (
-  <div
-    className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)}
-    {...props}
-  />
+  <div className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)} {...props} />
 )
 Card.displayName = "Card"
 
 const CardHeader = ({ className, ...props }) => (
-  <div
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
+  <div className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
 )
 CardHeader.displayName = "CardHeader"
 
 const CardTitle = ({ className, ...props }) => (
-  <h3
-    className={cn("text-2xl font-semibold leading-none tracking-tight", className)}
-    {...props}
-  />
+  <h3 className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
 )
 CardTitle.displayName = "CardTitle"
 
-const CardContent = ({ className, ...props }) => (
-  <div className={cn("p-6 pt-0", className)} {...props} />
-)
+const CardContent = ({ className, ...props }) => <div className={cn("p-6 pt-0", className)} {...props} />
 CardContent.displayName = "CardContent"
 
 const Badge = ({ children, variant = "default", className }) => {
@@ -155,7 +216,7 @@ const Badge = ({ children, variant = "default", className }) => {
       className={cn(
         "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
         variants[variant],
-        className
+        className,
       )}
     >
       {children}
@@ -196,7 +257,7 @@ const TabsList = ({ className, children }) => {
       role="tablist"
       className={cn(
         "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-        className
+        className,
       )}
     >
       {children}
@@ -216,7 +277,7 @@ const TabsTrigger = ({ className, value, children }) => {
       className={cn(
         "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
         isSelected ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:bg-muted/50",
-        className
+        className,
       )}
       onClick={() => handleValueChange(value)}
     >
@@ -237,7 +298,7 @@ const TabsContent = ({ className, value, children }) => {
       role="tabpanel"
       className={cn(
         "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        className
+        className,
       )}
     >
       {children}
@@ -256,7 +317,7 @@ Popover.displayName = "Popover"
 
 const PopoverTrigger = ({ children, asChild = false }) => {
   const { open, setOpen } = React.useContext(PopoverContext)
-  
+
   const handleClick = (e) => {
     e.preventDefault()
     setOpen(!open)
@@ -272,14 +333,14 @@ PopoverTrigger.displayName = "PopoverTrigger"
 
 const PopoverContent = ({ children, className }) => {
   const { open } = React.useContext(PopoverContext)
-  
+
   if (!open) return null
-  
+
   return (
-    <div 
+    <div
       className={cn(
         "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        className
+        className,
       )}
     >
       {children}
@@ -290,39 +351,39 @@ PopoverContent.displayName = "PopoverContent"
 
 const Calendar = ({ selected, onSelect, mode = "single", className, ...props }) => {
   const [month, setMonth] = useState(selected ? new Date(selected) : new Date())
-  
+
   const getDaysInMonth = (year, month) => {
     return new Date(year, month + 1, 0).getDate()
   }
-  
+
   const getFirstDayOfMonth = (year, month) => {
     return new Date(year, month, 1).getDay()
   }
-  
+
   const handleDateClick = (date) => {
     if (onSelect) {
       onSelect(date)
     }
   }
-  
+
   const renderCalendar = () => {
     const year = month.getFullYear()
     const monthIndex = month.getMonth()
     const daysInMonth = getDaysInMonth(year, monthIndex)
     const firstDay = getFirstDayOfMonth(year, monthIndex)
-    
+
     const days = []
-    
+
     // Empty cells for days before the first day of the month
     for (let i = 0; i < firstDay; i++) {
       days.push(<div key={`empty-${i}`} className="h-9 w-9"></div>)
     }
-    
+
     // Cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(year, monthIndex, day)
       const isSelected = selected && new Date(selected).toDateString() === date.toDateString()
-      
+
       days.push(
         <button
           key={day}
@@ -330,30 +391,28 @@ const Calendar = ({ selected, onSelect, mode = "single", className, ...props }) 
           className={cn(
             "h-9 w-9 rounded-md p-0 font-normal aria-selected:opacity-100",
             isSelected && "bg-primary text-primary-foreground",
-            !isSelected && "hover:bg-accent hover:text-accent-foreground"
+            !isSelected && "hover:bg-accent hover:text-accent-foreground",
           )}
         >
           {day}
-        </button>
+        </button>,
       )
     }
-    
+
     return days
   }
-  
+
   return (
     <div className={cn("p-3", className)} {...props}>
       <div className="flex justify-between mb-2">
-        <button 
+        <button
           onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}
           className="p-1 rounded-md hover:bg-accent"
         >
           &lt;
         </button>
-        <div>
-          {month.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-        </div>
-        <button 
+        <div>{month.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</div>
+        <button
           onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
           className="p-1 rounded-md hover:bg-accent"
         >
@@ -377,10 +436,7 @@ Calendar.displayName = "Calendar"
 
 const Avatar = ({ className, children, ...props }) => {
   return (
-    <div
-      className={cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className)}
-      {...props}
-    >
+    <div className={cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className)} {...props}>
       {children}
     </div>
   )
@@ -392,7 +448,7 @@ const AvatarFallback = ({ className, children, ...props }) => {
     <div
       className={cn(
         "flex h-full w-full items-center justify-center rounded-full bg-muted text-muted-foreground",
-        className
+        className,
       )}
       {...props}
     >
@@ -403,12 +459,7 @@ const AvatarFallback = ({ className, children, ...props }) => {
 AvatarFallback.displayName = "AvatarFallback"
 
 const Skeleton = ({ className, ...props }) => {
-  return (
-    <div
-      className={cn("animate-pulse rounded-md bg-muted", className)}
-      {...props}
-    />
-  )
+  return <div className={cn("animate-pulse rounded-md bg-muted", className)} {...props} />
 }
 Skeleton.displayName = "Skeleton"
 
@@ -417,7 +468,7 @@ const Textarea = React.forwardRef(({ className, ...props }, ref) => {
     <textarea
       className={cn(
         "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className
+        className,
       )}
       ref={ref}
       {...props}
@@ -438,7 +489,7 @@ const Select = React.forwardRef(({ className, children, value, onValueChange, ..
       <select
         className={cn(
           "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-          className
+          className,
         )}
         ref={ref}
         value={value}
@@ -460,7 +511,7 @@ const SelectTrigger = React.forwardRef(({ className, children, ...props }, ref) 
     ref={ref}
     className={cn(
       "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-      className
+      className,
     )}
     {...props}
   >
@@ -480,7 +531,7 @@ const SelectContent = React.forwardRef(({ className, children, ...props }, ref) 
     ref={ref}
     className={cn(
       "absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-80",
-      className
+      className,
     )}
     {...props}
   >
@@ -494,7 +545,7 @@ const SelectItem = React.forwardRef(({ className, children, value, ...props }, r
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      className
+      className,
     )}
     {...props}
   >
@@ -510,7 +561,7 @@ SelectItem.displayName = "SelectItem"
 export default function TithesOfferings() {
   // Initialize Supabase client
   const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || ""
-  const supabaseKey = process.env.REACT_APP_SUPABASE_KEY || ""
+  const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY || ""
   const supabase = createClient(supabaseUrl, supabaseKey)
 
   const [members, setMembers] = useState([])
@@ -545,7 +596,6 @@ export default function TithesOfferings() {
         .from(process.env.REACT_APP_MEMBERVIS_TABLE)
         .select("*", { count: "exact" })
         .order(sortField, { ascending: sortOrder === "asc" })
-        .range((page - 1) * pageSize, page * pageSize - 1)
 
       if (memberError) {
         console.error("Error fetching members:", memberError)
@@ -587,7 +637,12 @@ export default function TithesOfferings() {
     }
 
     fetchData()
-  }, [sortField, sortOrder, page, pageSize, activeTab])
+  }, [sortField, sortOrder])
+
+  useEffect(() => {
+    // Reset to page 1 when search query changes
+    setPage(1)
+  }, [searchQuery])
 
   // Handle tithe/offering change
   const handleTitheChange = (memberId, field, value, existingTithe = {}) => {
@@ -657,6 +712,9 @@ export default function TithesOfferings() {
     )
   })
 
+  // Apply pagination to filtered members
+  const paginatedMembers = filteredMembers.slice((page - 1) * pageSize, page * pageSize)
+
   // Get tithe/offering for a specific member
   const getMemberTithe = (memberId) => {
     return tithesOfferings.find((t) => t.member_id === memberId) || {}
@@ -717,12 +775,13 @@ export default function TithesOfferings() {
     }
 
     return (
-      <div className="flex items-center justify-center mt-6 gap-1">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={() => onPageChange(currentPage - 1)} 
+      <div className="flex items-center justify-center mt-8 gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
+          className="border-gray-300 text-gray-700 hover:bg-gray-50"
         >
           Previous
         </Button>
@@ -730,12 +789,17 @@ export default function TithesOfferings() {
         {pages.map((pageNum, index) => (
           <React.Fragment key={index}>
             {pageNum === "..." ? (
-              <span className="px-3 py-2">...</span>
+              <span className="px-3 py-2 text-gray-500">...</span>
             ) : (
               <Button
                 variant={currentPage === pageNum ? "default" : "outline"}
                 size="sm"
                 onClick={() => onPageChange(pageNum)}
+                className={
+                  currentPage === pageNum
+                    ? "bg-[#098F8F] hover:bg-[#076e6e] text-white"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                }
               >
                 {pageNum}
               </Button>
@@ -744,10 +808,11 @@ export default function TithesOfferings() {
         ))}
 
         <Button
-          variant="outline" 
-          size="sm" 
-          onClick={() => onPageChange(currentPage + 1)} 
+          variant="outline"
+          size="sm"
+          onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
+          className="border-gray-300 text-gray-700 hover:bg-gray-50"
         >
           Next
         </Button>
@@ -759,54 +824,56 @@ export default function TithesOfferings() {
     <div className="container mx-auto py-6 space-y-8">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-[#098F8F]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Tithes</CardTitle>
-            <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-600">Total Tithes</CardTitle>
+            <DollarSignIcon className="h-4 w-4 text-[#098F8F]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(summaryData.totalTithes, "USD")}</div>
+            <div className="text-2xl font-bold text-gray-800">{formatCurrency(summaryData.totalTithes, "USD")}</div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-[#098F8F]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Offerings</CardTitle>
-            <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-600">Total Offerings</CardTitle>
+            <DollarSignIcon className="h-4 w-4 text-[#098F8F]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(summaryData.totalOfferings, "USD")}</div>
+            <div className="text-2xl font-bold text-gray-800">{formatCurrency(summaryData.totalOfferings, "USD")}</div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-[#098F8F]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Collected</CardTitle>
-            <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-600">Total Collected</CardTitle>
+            <DollarSignIcon className="h-4 w-4 text-[#098F8F]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(summaryData.totalCollected, "USD")}</div>
+            <div className="text-2xl font-bold text-gray-800">{formatCurrency(summaryData.totalCollected, "USD")}</div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-[#098F8F]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Outstanding Balance</CardTitle>
-            <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-600">Outstanding Balance</CardTitle>
+            <DollarSignIcon className="h-4 w-4 text-[#098F8F]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(summaryData.outstandingBalance, "USD")}</div>
+            <div className="text-2xl font-bold text-gray-800">
+              {formatCurrency(summaryData.outstandingBalance, "USD")}
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Header and Search */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">Tithes and Offerings</h1>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-lg shadow-sm">
+        <h1 className="text-2xl font-bold text-gray-800">Tithes and Offerings</h1>
         <div className="relative">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
           <Input
-            className="pl-10 w-full md:w-[300px]"
+            className="pl-10 w-full md:w-[300px] border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
             placeholder="Search members"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -815,11 +882,31 @@ export default function TithesOfferings() {
       </div>
 
       {/* Tabs and Member Cards */}
-      <Tabs defaultValue="Everyone" value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="Everyone">Everyone</TabsTrigger>
-          <TabsTrigger value="Member">Members</TabsTrigger>
-          <TabsTrigger value="Visitor">Visitors</TabsTrigger>
+      <Tabs
+        defaultValue="Everyone"
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="bg-white rounded-lg shadow-sm p-4"
+      >
+        <TabsList className="bg-gray-100 p-1 rounded-md">
+          <TabsTrigger
+            value="Everyone"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#098F8F] data-[state=active]:shadow-sm"
+          >
+            Everyone
+          </TabsTrigger>
+          <TabsTrigger
+            value="Member"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#098F8F] data-[state=active]:shadow-sm"
+          >
+            Members
+          </TabsTrigger>
+          <TabsTrigger
+            value="Visitor"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#098F8F] data-[state=active]:shadow-sm"
+          >
+            Visitors
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab} className="mt-6">
@@ -828,7 +915,7 @@ export default function TithesOfferings() {
               {Array(pageSize)
                 .fill(0)
                 .map((_, i) => (
-                  <Card key={i} className="overflow-hidden">
+                  <Card key={i} className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-4 mb-4">
                         <Skeleton className="h-12 w-12 rounded-full" />
@@ -848,120 +935,157 @@ export default function TithesOfferings() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredMembers.map((member) => {
-                  const tithe = getMemberTithe(member.id)
+              {filteredMembers.length > 0 && searchQuery && (
+                <div className="text-sm text-gray-500 mb-4">
+                  Found {filteredMembers.length} {filteredMembers.length === 1 ? "result" : "results"} for "
+                  {searchQuery}"
+                </div>
+              )}
+              {filteredMembers.length === 0 ? (
+                <div className="text-center py-10">
+                  <div className="text-3xl font-bold text-gray-300 mb-2">No results found</div>
+                  <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {paginatedMembers.map((member) => {
+                      const tithe = getMemberTithe(member.id)
 
-                  return (
-                    <Card key={member.id} className="overflow-hidden">
-                      <CardContent className="p-6">
-                        <div className="flex items-center gap-4 mb-4">
-                          <Avatar>
-                            <AvatarFallback
-                              style={{
-                                background: `linear-gradient(135deg, #92A1C6, #146A7C)`,
-                              }}
-                            >
-                              {getInitials(member.first_name, member.last_name)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <h3 className="font-medium">
-                              {member.first_name} {member.last_name}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">{member.email}</p>
-                          </div>
-                        </div>
+                      return (
+                        <Card
+                          key={member.id}
+                          className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 border-t-4 border-t-[#098F8F]"
+                        >
+                          <CardContent className="p-6">
+                            <div className="flex items-center gap-4 mb-4">
+                              <Avatar>
+                                <AvatarFallback
+                                  style={{
+                                    background: `linear-gradient(135deg, #92A1C6, #146A7C)`,
+                                  }}
+                                  className="text-white font-medium"
+                                >
+                                  {getInitials(member.first_name, member.last_name)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <h3 className="font-medium text-gray-800">
+                                  {member.first_name} {member.last_name}
+                                </h3>
+                                <p className="text-sm text-gray-500">{member.email}</p>
+                              </div>
+                            </div>
 
-                        <div className="flex justify-between mb-4">
-                          <Badge variant={member.type === "Member" ? "default" : "outline"}>{member.type}</Badge>
-                          <Badge variant={member.status === "Active" ? "default" : "outline"}>{member.status}</Badge>
-                        </div>
+                            <div className="flex justify-between mb-4">
+                              <Badge
+                                variant={member.type === "Member" ? "default" : "outline"}
+                                className={member.type === "Member" ? "bg-[#098F8F] hover:bg-[#076e6e]" : ""}
+                              >
+                                {member.type}
+                              </Badge>
+                              <Badge
+                                variant={member.status === "Active" ? "default" : "outline"}
+                                className={member.status === "Active" ? "bg-green-600 hover:bg-green-700" : ""}
+                              >
+                                {member.status}
+                              </Badge>
+                            </div>
 
-                        <div className="space-y-4">
-                          {/* Event Selection */}
-                          <div className="grid grid-cols-1 gap-2">
-                            <label className="text-sm font-medium">Event</label>
-                            <Select
-                              value={tithe.event_id?.toString() || ""}
-                              onValueChange={(value) =>
-                                handleTitheChange(member.id, "event_id", Number.parseInt(value), tithe)
-                              }
-                            >
-                              {events.map((event) => (
-                                <option key={event.event_id} value={event.event_id.toString()}>
-                                  {event.name || `Event ${event.event_id}`}
-                                </option>
-                              ))}
-                            </Select>
-                          </div>
-
-                          {/* Date Picker */}
-                          <div className="grid grid-cols-1 gap-2">
-                            <label className="text-sm font-medium">Date Paid</label>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full justify-start text-left font-normal">
-                                  <CalendarIcon className="mr-2 h-4 w-4" />
-                                  {tithe.date_paid ? format(new Date(tithe.date_paid), "PPP") : "Select date"}
-                                </Button>
-                              </PopoverTrigger>
-                              <PopoverContent className="w-auto p-0">
-                                <Calendar
-                                  mode="single"
-                                  selected={tithe.date_paid ? new Date(tithe.date_paid) : undefined}
-                                  onSelect={(date) =>
-                                    handleTitheChange(
-                                      member.id,
-                                      "date_paid",
-                                      date ? date.toISOString().split("T")[0] : "",
-                                      tithe,
-                                    )
+                            <div className="space-y-4">
+                              {/* Event Selection */}
+                              <div className="grid grid-cols-1 gap-2">
+                                <label className="text-sm font-medium text-gray-700">Event</label>
+                                <Select
+                                  value={tithe.event_id?.toString() || ""}
+                                  onValueChange={(value) =>
+                                    handleTitheChange(member.id, "event_id", Number.parseInt(value), tithe)
                                   }
-                                  initialFocus
-                                />
-                              </PopoverContent>
-                            </Popover>
-                          </div>
+                                  className="border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
+                                >
+                                  {events.map((event) => (
+                                    <option key={event.event_id} value={event.event_id.toString()}>
+                                      {event.name || `Event ${event.event_id}`}
+                                    </option>
+                                  ))}
+                                </Select>
+                              </div>
 
-                          {/* Amount */}
-                          <div className="grid grid-cols-1 gap-2">
-                            <label className="text-sm font-medium">Amount</label>
-                            <div className="relative">
-                              <DollarSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                type="number"
-                                step="0.01"
-                                className="pl-10"
-                                placeholder="0.00"
-                                value={tithe.amount || ""}
-                                onChange={(e) => handleTitheChange(member.id, "amount", e.target.value, tithe)}
-                              />
+                              {/* Date Picker */}
+                              <div className="grid grid-cols-1 gap-2">
+                                <label className="text-sm font-medium text-gray-700">Date Paid</label>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      className="w-full justify-start text-left font-normal border-gray-300 text-gray-700"
+                                    >
+                                      <CalendarIcon className="mr-2 h-4 w-4 text-gray-500" />
+                                      {tithe.date_paid ? format(new Date(tithe.date_paid), "PPP") : "Select date"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                      mode="single"
+                                      selected={tithe.date_paid ? new Date(tithe.date_paid) : undefined}
+                                      onSelect={(date) =>
+                                        handleTitheChange(
+                                          member.id,
+                                          "date_paid",
+                                          date ? date.toISOString().split("T")[0] : "",
+                                          tithe,
+                                        )
+                                      }
+                                      initialFocus
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+
+                              {/* Amount */}
+                              <div className="grid grid-cols-1 gap-2">
+                                <label className="text-sm font-medium text-gray-700">Amount</label>
+                                <div className="relative">
+                                  <DollarSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                                  <Input
+                                    type="number"
+                                    step="0.01"
+                                    className="pl-10 border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
+                                    placeholder="0.00"
+                                    value={tithe.amount || ""}
+                                    onChange={(e) => handleTitheChange(member.id, "amount", e.target.value, tithe)}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Notes */}
+                              <div className="grid grid-cols-1 gap-2">
+                                <label className="text-sm font-medium text-gray-700">Notes</label>
+                                <div className="relative">
+                                  <FileTextIcon className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                                  <Textarea
+                                    className="pl-10 min-h-[80px] border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
+                                    placeholder="Add notes here..."
+                                    value={tithe.notes || ""}
+                                    onChange={(e) => handleTitheChange(member.id, "notes", e.target.value, tithe)}
+                                  />
+                                </div>
+                              </div>
                             </div>
-                          </div>
+                          </CardContent>
+                        </Card>
+                      )
+                    })}
+                  </div>
 
-                          {/* Notes */}
-                          <div className="grid grid-cols-1 gap-2">
-                            <label className="text-sm font-medium">Notes</label>
-                            <div className="relative">
-                              <FileTextIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                              <Textarea
-                                className="pl-10 min-h-[80px]"
-                                placeholder="Add notes here..."
-                                value={tithe.notes || ""}
-                                onChange={(e) => handleTitheChange(member.id, "notes", e.target.value, tithe)}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )
-                })}
-              </div>
-
-              {/* Custom Pagination */}
-              <Pagination currentPage={page} totalPages={Math.ceil(totalMembers / pageSize)} onPageChange={setPage} />
+                  {/* Custom Pagination */}
+                  <Pagination
+                    currentPage={page}
+                    totalPages={Math.ceil(filteredMembers.length / pageSize)}
+                    onPageChange={setPage}
+                  />
+                </>
+              )}
             </>
           )}
         </TabsContent>
@@ -969,7 +1093,10 @@ export default function TithesOfferings() {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} className="bg-[#098F8F] hover:bg-[#076e6e] text-white">
+        <Button
+          onClick={handleSave}
+          className="bg-[#098F8F] hover:bg-[#076e6e] text-white shadow-md hover:shadow-lg transition-all duration-300 px-6"
+        >
           <SaveIcon className="mr-2 h-4 w-4" />
           Save
         </Button>
