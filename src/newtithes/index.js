@@ -135,6 +135,41 @@ const ChevronDownIcon = () => (
   </svg>
 )
 
+const PlusIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+  </svg>
+)
+
+const HistoryIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+    <path d="M3 3v5h5"></path>
+    <path d="M12 7v5l4 2"></path>
+  </svg>
+)
+
 // UI Components
 const Button = React.forwardRef(({ className, variant = "default", size = "default", children, ...props }, ref) => {
   const variants = {
@@ -557,6 +592,25 @@ const SelectItem = React.forwardRef(({ className, children, value, ...props }, r
 ))
 SelectItem.displayName = "SelectItem"
 
+// Modal component
+const Modal = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg max-w-md w-full max-h-[90vh] overflow-auto">
+        <div className="flex justify-between items-center p-4 border-b">
+          <h3 className="text-lg font-medium">{title}</h3>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            ✕
+          </button>
+        </div>
+        <div className="p-4">{children}</div>
+      </div>
+    </div>
+  )
+}
+
 // Main Component
 export default function TithesOfferings() {
   // Initialize Supabase client
@@ -566,6 +620,7 @@ export default function TithesOfferings() {
 
   const [members, setMembers] = useState([])
   const [tithesOfferings, setTithesOfferings] = useState([])
+  const [memberTithes, setMemberTithes] = useState({}) // Store tithes by member ID
   const [events, setEvents] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
   const [activeTab, setActiveTab] = useState("Everyone")
@@ -581,6 +636,13 @@ export default function TithesOfferings() {
     totalCollected: 0,
     outstandingBalance: 0,
   })
+
+  // State for new tithe entries
+  const [newTithes, setNewTithes] = useState({})
+
+  // State for history modal
+  const [historyModalOpen, setHistoryModalOpen] = useState(false)
+  const [selectedMember, setSelectedMember] = useState(null)
 
   // Fetch data on component mount and when dependencies change
   useEffect(() => {
@@ -612,6 +674,29 @@ export default function TithesOfferings() {
       } else {
         setTithesOfferings(tithesData || [])
 
+        // Group tithes by member ID
+        const tithesGrouped = {}
+        tithesData?.forEach((tithe) => {
+          if (!tithesGrouped[tithe.member_id]) {
+            tithesGrouped[tithe.member_id] = []
+          }
+          tithesGrouped[tithe.member_id].push(tithe)
+        })
+        setMemberTithes(tithesGrouped)
+
+        // Initialize new tithes state
+        const initialNewTithes = {}
+        memberData?.forEach((member) => {
+          initialNewTithes[member.id] = {
+            member_id: member.id,
+            date_paid: new Date().toISOString().split("T")[0],
+            amount: "",
+            event_id: "",
+            notes: "",
+          }
+        })
+        setNewTithes(initialNewTithes)
+
         // Calculate summary data
         const totalTithes = tithesData?.reduce((sum, item) => sum + (Number(item.amount) || 0), 0) || 0
         const totalOfferings = 2000 // This is hardcoded in the original code
@@ -638,7 +723,9 @@ export default function TithesOfferings() {
           // If name is missing, create a formatted name based on date
           name:
             event.event_type ||
-            (event.start_date ? `Event on ${format(new Date(event.start_date), "MMM d, yyyy")}` : `Event ${event.event_id}`),
+            (event.start_date
+              ? `Event on ${format(new Date(event.start_date), "MMM d, yyyy")}`
+              : `Event ${event.event_id}`),
         }))
         setEvents(formattedEvents)
       }
@@ -654,63 +741,101 @@ export default function TithesOfferings() {
     setPage(1)
   }, [searchQuery])
 
-  // Handle tithe/offering change
-  const handleTitheChange = (memberId, field, value, existingTithe = {}) => {
-    setTithesOfferings((prevTithes) => {
-      const newTithes = [...prevTithes]
-      const titheIndex = newTithes.findIndex((t) => t.id === existingTithe.id)
-
-      if (titheIndex > -1) {
-        newTithes[titheIndex] = { ...newTithes[titheIndex], [field]: value }
-      } else {
-        // Create a new tithe entry
-        newTithes.push({
-          member_id: memberId,
-          date_paid: new Date().toISOString().split("T")[0],
-          amount: 0,
-          event_id: events.length > 0 ? events[0].event_id : null,
-          notes: "",
-          ...existingTithe,
-          [field]: value,
-        })
-      }
-
-      return newTithes
-    })
+  // Handle tithe/offering change for new entries
+  const handleTitheChange = (memberId, field, value) => {
+    setNewTithes((prev) => ({
+      ...prev,
+      [memberId]: {
+        ...prev[memberId],
+        [field]: value,
+      },
+    }))
   }
 
   // Save tithes and offerings to database
   const handleSave = async () => {
     try {
-      for (const tithe of tithesOfferings) {
-        // Skip entries without required fields
-        if (!tithe.member_id || !tithe.event_id || !tithe.date_paid) continue
+      const tithesToSave = []
 
-        const { id, created_at, updated_at, ...titheData } = tithe
-
-        if (id) {
-          // Update existing record
-          await supabase
-            .from("tithes_offering")
-            .update({
-              ...titheData,
-              updated_at: new Date().toISOString(),
-            })
-            .eq("id", id)
-        } else {
-          // Insert new record
-          await supabase.from("tithes_offering").insert({
-            ...titheData,
+      // Collect all valid new tithe entries
+      Object.values(newTithes).forEach((tithe) => {
+        // Only save entries that have required fields and amount > 0
+        if (tithe.member_id && tithe.event_id && tithe.date_paid && tithe.amount && Number(tithe.amount) > 0) {
+          tithesToSave.push({
+            member_id: tithe.member_id,
+            event_id: tithe.event_id,
+            date_paid: tithe.date_paid,
+            amount: Number(tithe.amount),
+            notes: tithe.notes || "",
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           })
         }
+      })
+
+      // Only proceed if there are valid entries to save
+      if (tithesToSave.length > 0) {
+        // Insert all new records
+        const { data, error } = await supabase.from("tithes_offering").insert(tithesToSave)
+
+        if (error) {
+          throw error
+        }
+
+        // Reset the form after successful save
+        const resetNewTithes = {}
+        members.forEach((member) => {
+          resetNewTithes[member.id] = {
+            member_id: member.id,
+            date_paid: new Date().toISOString().split("T")[0],
+            amount: "",
+            event_id: "",
+            notes: "",
+          }
+        })
+        setNewTithes(resetNewTithes)
+
+        // Refresh tithes data
+        const { data: refreshedTithes, error: refreshError } = await supabase.from("tithes_offering").select("*")
+
+        if (!refreshError) {
+          setTithesOfferings(refreshedTithes || [])
+
+          // Update grouped tithes
+          const tithesGrouped = {}
+          refreshedTithes?.forEach((tithe) => {
+            if (!tithesGrouped[tithe.member_id]) {
+              tithesGrouped[tithe.member_id] = []
+            }
+            tithesGrouped[tithe.member_id].push(tithe)
+          })
+          setMemberTithes(tithesGrouped)
+
+          // Update summary data
+          const totalTithes = refreshedTithes?.reduce((sum, item) => sum + (Number(item.amount) || 0), 0) || 0
+          setSummaryData((prev) => ({
+            ...prev,
+            totalTithes,
+            totalCollected: totalTithes + prev.totalOfferings,
+          }))
+        }
+
+        alert("Tithes and offerings saved successfully")
+      } else {
+        alert(
+          "No valid tithe entries to save. Please check that all required fields are filled and amounts are greater than zero.",
+        )
       }
-      alert("Tithes and offerings saved successfully")
     } catch (error) {
       console.error("Error saving tithes and offerings:", error)
-      alert("Error saving tithes and offerings")
+      alert("Error saving tithes and offerings: " + error.message)
     }
+  }
+
+  // Open history modal for a member
+  const openHistoryModal = (member) => {
+    setSelectedMember(member)
+    setHistoryModalOpen(true)
   }
 
   // Filter members based on search query and active tab
@@ -725,11 +850,6 @@ export default function TithesOfferings() {
   // Apply pagination to filtered members
   const paginatedMembers = filteredMembers.slice((page - 1) * pageSize, page * pageSize)
 
-  // Get tithe/offering for a specific member
-  const getMemberTithe = (memberId) => {
-    return tithesOfferings.find((t) => t.member_id === memberId) || {}
-  }
-
   // Format currency
   const formatCurrency = (amount, currency = "USD") => {
     return new Intl.NumberFormat("en-US", {
@@ -742,6 +862,12 @@ export default function TithesOfferings() {
   // Get initials from name
   const getInitials = (firstName, lastName) => {
     return `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase()
+  }
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return ""
+    return format(new Date(dateString), "MMM d, yyyy")
   }
 
   // Custom pagination component
@@ -960,7 +1086,14 @@ export default function TithesOfferings() {
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {paginatedMembers.map((member) => {
-                      const tithe = getMemberTithe(member.id)
+                      const memberHistory = memberTithes[member.id] || []
+                      const newTithe = newTithes[member.id] || {
+                        member_id: member.id,
+                        date_paid: new Date().toISOString().split("T")[0],
+                        amount: "",
+                        event_id: "",
+                        notes: "",
+                      }
 
                       return (
                         <Card
@@ -1000,6 +1133,18 @@ export default function TithesOfferings() {
                               >
                                 {member.status}
                               </Badge>
+
+                              {memberHistory.length > 0 && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => openHistoryModal(member)}
+                                  className="text-[#098F8F] hover:text-[#076e6e] p-1"
+                                  title="View payment history"
+                                >
+                                  <HistoryIcon className="h-4 w-4" />
+                                </Button>
+                              )}
                             </div>
 
                             <div className="space-y-4">
@@ -1007,9 +1152,9 @@ export default function TithesOfferings() {
                               <div className="grid grid-cols-1 gap-2">
                                 <label className="text-sm font-medium text-gray-700">Event</label>
                                 <Select
-                                  value={tithe.event_id?.toString() || ""}
+                                  value={newTithe.event_id?.toString() || ""}
                                   onValueChange={(value) =>
-                                    handleTitheChange(member.id, "event_id", Number.parseInt(value), tithe)
+                                    handleTitheChange(member.id, "event_id", Number.parseInt(value))
                                   }
                                   className="border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
                                 >
@@ -1032,19 +1177,18 @@ export default function TithesOfferings() {
                                       className="w-full justify-start text-left font-normal border-gray-300 text-gray-700"
                                     >
                                       <CalendarIcon className="mr-2 h-4 w-4 text-gray-500" />
-                                      {tithe.date_paid ? format(new Date(tithe.date_paid), "PPP") : "Select date"}
+                                      {newTithe.date_paid ? format(new Date(newTithe.date_paid), "PPP") : "Select date"}
                                     </Button>
                                   </PopoverTrigger>
                                   <PopoverContent className="w-auto p-0">
                                     <Calendar
                                       mode="single"
-                                      selected={tithe.date_paid ? new Date(tithe.date_paid) : undefined}
+                                      selected={newTithe.date_paid ? new Date(newTithe.date_paid) : undefined}
                                       onSelect={(date) =>
                                         handleTitheChange(
                                           member.id,
                                           "date_paid",
                                           date ? date.toISOString().split("T")[0] : "",
-                                          tithe,
                                         )
                                       }
                                       initialFocus
@@ -1063,8 +1207,8 @@ export default function TithesOfferings() {
                                     step="0.01"
                                     className="pl-10 border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
                                     placeholder="0.00"
-                                    value={tithe.amount || ""}
-                                    onChange={(e) => handleTitheChange(member.id, "amount", e.target.value, tithe)}
+                                    value={newTithe.amount || ""}
+                                    onChange={(e) => handleTitheChange(member.id, "amount", e.target.value)}
                                   />
                                 </div>
                               </div>
@@ -1077,8 +1221,8 @@ export default function TithesOfferings() {
                                   <Textarea
                                     className="pl-10 min-h-[80px] border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
                                     placeholder="Add notes here..."
-                                    value={tithe.notes || ""}
-                                    onChange={(e) => handleTitheChange(member.id, "notes", e.target.value, tithe)}
+                                    value={newTithe.notes || ""}
+                                    onChange={(e) => handleTitheChange(member.id, "notes", e.target.value)}
                                   />
                                 </div>
                               </div>
@@ -1112,6 +1256,75 @@ export default function TithesOfferings() {
           Save
         </Button>
       </div>
+
+      {/* History Modal */}
+      <Modal
+        isOpen={historyModalOpen}
+        onClose={() => setHistoryModalOpen(false)}
+        title={
+          selectedMember
+            ? `Payment History - ${selectedMember.first_name} ${selectedMember.last_name}`
+            : "Payment History"
+        }
+      >
+        {selectedMember && (
+          <div className="space-y-4">
+            {memberTithes[selectedMember.id]?.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Event
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Amount
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Notes
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {memberTithes[selectedMember.id]
+                      .sort((a, b) => new Date(b.date_paid) - new Date(a.date_paid))
+                      .map((tithe) => {
+                        const event = events.find((e) => e.event_id === tithe.event_id)
+                        return (
+                          <tr key={tithe.id}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {formatDate(tithe.date_paid)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {event ? event.event_type : `Event ${tithe.event_id}`}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {formatCurrency(tithe.amount)}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{tithe.notes || "-"}</td>
+                          </tr>
+                        )
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-center text-gray-500">No payment history found for this member.</p>
+            )}
+            <div className="flex justify-end mt-4">
+              <Button
+                onClick={() => setHistoryModalOpen(false)}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }
