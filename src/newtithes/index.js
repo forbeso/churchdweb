@@ -5,6 +5,7 @@ import { createClient } from "@supabase/supabase-js"
 import { format } from "date-fns"
 import clsx from "clsx"
 import { twMerge } from "tailwind-merge"
+import TithesReportButton from "./TithesReportButton"
 
 // Utility function
 function cn(...inputs) {
@@ -1150,6 +1151,8 @@ export default function TithesOfferings() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+
+        <TithesReportButton />
       </div>
 
       {/* Tabs and Member Cards */}
