@@ -625,12 +625,22 @@ export default function TithesOfferings() {
       }
 
       // Fetch events
-      const { data: eventsData, error: eventsError } = await supabase.from("events").select("*")
+      const { data: eventsData, error: eventsError } = await supabase
+        .from("events")
+        .select("event_id, name, date, description")
 
       if (eventsError) {
         console.error("Error fetching events:", eventsError)
       } else {
-        setEvents(eventsData || [])
+        // Make sure events have proper names for display
+        const formattedEvents = (eventsData || []).map((event) => ({
+          ...event,
+          // If name is missing, create a formatted name based on date
+          name:
+            event.name ||
+            (event.date ? `Event on ${format(new Date(event.date), "MMM d, yyyy")}` : `Event ${event.event_id}`),
+        }))
+        setEvents(formattedEvents)
       }
 
       setLoading(false)
@@ -1003,6 +1013,7 @@ export default function TithesOfferings() {
                                   }
                                   className="border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
                                 >
+                                  <option value="">Select an event</option>
                                   {events.map((event) => (
                                     <option key={event.event_id} value={event.event_id.toString()}>
                                       {event.name || `Event ${event.event_id}`}
