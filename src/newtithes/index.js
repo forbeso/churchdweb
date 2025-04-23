@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js"
 import { format } from "date-fns"
 import clsx from "clsx"
 import { twMerge } from "tailwind-merge"
-import TithesReportButton from "./TithesReportButton"
+import TithesReportButton from "../TithesReportButton"
 
 // Utility function
 function cn(...inputs) {
