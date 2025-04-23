@@ -627,7 +627,7 @@ export default function TithesOfferings() {
       // Fetch events
       const { data: eventsData, error: eventsError } = await supabase
         .from("events")
-        .select("event_id, name, date, description")
+        .select("event_id, event_type, start_date, location")
 
       if (eventsError) {
         console.error("Error fetching events:", eventsError)
@@ -637,8 +637,8 @@ export default function TithesOfferings() {
           ...event,
           // If name is missing, create a formatted name based on date
           name:
-            event.name ||
-            (event.date ? `Event on ${format(new Date(event.date), "MMM d, yyyy")}` : `Event ${event.event_id}`),
+            event.event_type ||
+            (event.start_date ? `Event on ${format(new Date(event.start_date), "MMM d, yyyy")}` : `Event ${event.event_id}`),
         }))
         setEvents(formattedEvents)
       }
@@ -1016,7 +1016,7 @@ export default function TithesOfferings() {
                                   <option value="">Select an event</option>
                                   {events.map((event) => (
                                     <option key={event.event_id} value={event.event_id.toString()}>
-                                      {event.name || `Event ${event.event_id}`}
+                                      {event.event_type || `Event ${event.event_id}`}
                                     </option>
                                   ))}
                                 </Select>
