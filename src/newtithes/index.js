@@ -644,6 +644,11 @@ export default function TithesOfferings() {
   const [historyModalOpen, setHistoryModalOpen] = useState(false)
   const [selectedMember, setSelectedMember] = useState(null)
 
+  // First, add a new state for tracking which history entry is being edited
+  // Add this with the other state declarations (around line 600)
+  const [editingTitheId, setEditingTitheId] = useState(null)
+  const [editingTithe, setEditingTithe] = useState(null)
+
   // Fetch data on component mount and when dependencies change
   useEffect(() => {
     async function fetchData() {
@@ -956,6 +961,136 @@ export default function TithesOfferings() {
     )
   }
 
+  // Add these functions before the return statement (around line 800)
+
+  // Function to start editing a tithe record
+  const startEditingTithe = (tithe) => {
+    setEditingTitheId(tithe.id)
+    setEditingTithe({ ...tithe })
+  }
+
+  // Function to cancel editing
+  const cancelEditingTithe = () => {
+    setEditingTitheId(null)
+    setEditingTithe(null)
+  }
+
+  // Function to handle changes to the editing tithe
+  const handleEditTitheChange = (field, value) => {
+    setEditingTithe((prev) => ({
+      ...prev,
+      [field]: value,
+    }))
+  }
+
+  // Function to save edited tithe
+  const saveEditedTithe = async () => {
+    try {
+      // Validate required fields
+      if (!editingTithe.member_id || !editingTithe.event_id || !editingTithe.date_paid || !editingTithe.amount) {
+        alert("Please fill in all required fields")
+        return
+      }
+
+      // Update the record in the database
+      const { error } = await supabase
+        .from("tithes_offering")
+        .update({
+          event_id: editingTithe.event_id,
+          date_paid: editingTithe.date_paid,
+          amount: Number(editingTithe.amount),
+          notes: editingTithe.notes || "",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", editingTithe.id)
+
+      if (error) {
+        throw error
+      }
+
+      // Refresh tithes data
+      const { data: refreshedTithes, error: refreshError } = await supabase.from("tithes_offering").select("*")
+
+      if (!refreshError) {
+        setTithesOfferings(refreshedTithes || [])
+
+        // Update grouped tithes
+        const tithesGrouped = {}
+        refreshedTithes?.forEach((tithe) => {
+          if (!tithesGrouped[tithe.member_id]) {
+            tithesGrouped[tithe.member_id] = []
+          }
+          tithesGrouped[tithe.member_id].push(tithe)
+        })
+        setMemberTithes(tithesGrouped)
+
+        // Update summary data
+        const totalTithes = refreshedTithes?.reduce((sum, item) => sum + (Number(item.amount) || 0), 0) || 0
+        setSummaryData((prev) => ({
+          ...prev,
+          totalTithes,
+          totalCollected: totalTithes + prev.totalOfferings,
+        }))
+      }
+
+      // Reset editing state
+      setEditingTitheId(null)
+      setEditingTithe(null)
+
+      alert("Payment record updated successfully")
+    } catch (error) {
+      console.error("Error updating tithe record:", error)
+      alert("Error updating payment record: " + error.message)
+    }
+  }
+
+  // Function to delete a tithe record
+  const deleteTitheRecord = async (titheId) => {
+    if (!confirm("Are you sure you want to delete this payment record? This action cannot be undone.")) {
+      return
+    }
+
+    try {
+      const { error } = await supabase.from("tithes_offering").delete().eq("id", titheId)
+
+      if (error) {
+        throw error
+      }
+
+      // Refresh tithes data
+      const { data: refreshedTithes, error: refreshError } = await supabase.from("tithes_offering").select("*")
+
+      if (!refreshError) {
+        setTithesOfferings(refreshedTithes || [])
+
+        // Update grouped tithes
+        const tithesGrouped = {}
+        refreshedTithes?.forEach((tithe) => {
+          if (!tithesGrouped[tithe.member_id]) {
+            tithesGrouped[tithe.member_id] = []
+          }
+          tithesGrouped[tithe.member_id].push(tithe)
+        })
+        setMemberTithes(tithesGrouped)
+
+        // Update summary data
+        const totalTithes = refreshedTithes?.reduce((sum, item) => sum + (Number(item.amount) || 0), 0) || 0
+        setSummaryData((prev) => ({
+          ...prev,
+          totalTithes,
+          totalCollected: totalTithes + prev.totalOfferings,
+        }))
+      }
+
+      alert("Payment record deleted successfully")
+    } catch (error) {
+      console.error("Error deleting tithe record:", error)
+      alert("Error deleting payment record: " + error.message)
+    }
+  }
+
+  // Now update the History Modal section to include edit functionality
+  // Replace the entire History Modal section (around line 1200) with this updated version:
   return (
     <div className="container mx-auto py-6 space-y-8">
       {/* Summary Cards */}
@@ -1260,7 +1395,11 @@ export default function TithesOfferings() {
       {/* History Modal */}
       <Modal
         isOpen={historyModalOpen}
-        onClose={() => setHistoryModalOpen(false)}
+        onClose={() => {
+          setHistoryModalOpen(false)
+          setEditingTitheId(null)
+          setEditingTithe(null)
+        }}
         title={
           selectedMember
             ? `Payment History - ${selectedMember.first_name} ${selectedMember.last_name}`
@@ -1286,6 +1425,9 @@ export default function TithesOfferings() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Notes
                       </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -1293,6 +1435,93 @@ export default function TithesOfferings() {
                       .sort((a, b) => new Date(b.date_paid) - new Date(a.date_paid))
                       .map((tithe) => {
                         const event = events.find((e) => e.event_id === tithe.event_id)
+                        const isEditing = editingTitheId === tithe.id
+
+                        if (isEditing) {
+                          return (
+                            <tr key={tithe.id} className="bg-blue-50">
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      className="w-full justify-start text-left font-normal border-gray-300 text-gray-700"
+                                    >
+                                      <CalendarIcon className="mr-2 h-4 w-4 text-gray-500" />
+                                      {editingTithe.date_paid
+                                        ? format(new Date(editingTithe.date_paid), "PPP")
+                                        : "Select date"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                      mode="single"
+                                      selected={editingTithe.date_paid ? new Date(editingTithe.date_paid) : undefined}
+                                      onSelect={(date) =>
+                                        handleEditTitheChange("date_paid", date ? date.toISOString().split("T")[0] : "")
+                                      }
+                                      initialFocus
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <Select
+                                  value={editingTithe.event_id?.toString() || ""}
+                                  onValueChange={(value) => handleEditTitheChange("event_id", Number.parseInt(value))}
+                                  className="border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
+                                >
+                                  <option value="">Select an event</option>
+                                  {events.map((event) => (
+                                    <option key={event.event_id} value={event.event_id.toString()}>
+                                      {event.event_type || `Event ${event.event_id}`}
+                                    </option>
+                                  ))}
+                                </Select>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="relative">
+                                  <DollarSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                                  <Input
+                                    type="number"
+                                    step="0.01"
+                                    className="pl-10 border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
+                                    placeholder="0.00"
+                                    value={editingTithe.amount || ""}
+                                    onChange={(e) => handleEditTitheChange("amount", e.target.value)}
+                                  />
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <Textarea
+                                  className="border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F] min-h-[60px]"
+                                  placeholder="Add notes here..."
+                                  value={editingTithe.notes || ""}
+                                  onChange={(e) => handleEditTitheChange("notes", e.target.value)}
+                                />
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div className="flex justify-end space-x-2">
+                                  <Button
+                                    onClick={saveEditedTithe}
+                                    className="bg-green-600 hover:bg-green-700 text-white"
+                                    size="sm"
+                                  >
+                                    Save
+                                  </Button>
+                                  <Button
+                                    onClick={cancelEditingTithe}
+                                    className="bg-gray-300 hover:bg-gray-400 text-gray-800"
+                                    size="sm"
+                                  >
+                                    Cancel
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          )
+                        }
+
                         return (
                           <tr key={tithe.id}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -1305,6 +1534,24 @@ export default function TithesOfferings() {
                               {formatCurrency(tithe.amount)}
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{tithe.notes || "-"}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                              <div className="flex justify-end space-x-2">
+                                <Button
+                                  onClick={() => startEditingTithe(tithe)}
+                                  className="bg-[#098F8F] hover:bg-[#076e6e] text-white"
+                                  size="sm"
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  onClick={() => deleteTitheRecord(tithe.id)}
+                                  className="bg-red-600 hover:bg-red-700 text-white"
+                                  size="sm"
+                                >
+                                  Delete
+                                </Button>
+                              </div>
+                            </td>
                           </tr>
                         )
                       })}
@@ -1316,7 +1563,11 @@ export default function TithesOfferings() {
             )}
             <div className="flex justify-end mt-4">
               <Button
-                onClick={() => setHistoryModalOpen(false)}
+                onClick={() => {
+                  setHistoryModalOpen(false)
+                  setEditingTitheId(null)
+                  setEditingTithe(null)
+                }}
                 className="bg-gray-200 hover:bg-gray-300 text-gray-800"
               >
                 Close
