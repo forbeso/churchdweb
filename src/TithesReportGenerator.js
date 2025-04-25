@@ -29,7 +29,8 @@ import {
   Printer,
   FileText,
 } from "lucide-react"
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib"
+import jsPDF from "jspdf"
+import "jspdf-autotable"
 import { toPng } from "html-to-image"
 
 // Initialize Supabase client
@@ -282,487 +283,153 @@ const TithesReportGenerator = () => {
 
     try {
       // Create a new PDF document
-      const pdfDoc = await PDFDocument.create()
+      const doc = new jsPDF("landscape", "pt", "a4")
+      const pageWidth = doc.internal.pageSize.getWidth()
+      const pageHeight = doc.internal.pageSize.getHeight()
+      const margin = 40
 
-      // Add pages
-      const page1 = pdfDoc.addPage([842, 595]) // A4 landscape
-      const page2 = pdfDoc.addPage([842, 595])
-      const page3 = pdfDoc.addPage([842, 595])
+      // Add title
+      doc.setFontSize(24)
+      doc.setTextColor(9, 143, 143) // #098F8F
+      doc.text("Tithes & Offerings Report", margin, margin + 10)
 
-      // Load fonts
-      const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
-      const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
-      const timesRoman = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+      // Add date range
+      doc.setFontSize(12)
+      doc.setTextColor(100, 100, 100)
+      doc.text(`${formatDate(dateRange.startDate)} - ${formatDate(dateRange.endDate)}`, margin, margin + 30)
 
-      // Define colors
-      const primaryColor = rgb(0.035, 0.561, 0.561) // #098F8F
-      const secondaryColor = rgb(0.2, 0.831, 0.6) // #34D399
-      const textColor = rgb(0.2, 0.2, 0.2)
-      const lightGray = rgb(0.9, 0.9, 0.9)
+      // Add horizontal line
+      doc.setDrawColor(9, 143, 143)
+      doc.setLineWidth(1)
+      doc.line(margin, margin + 40, pageWidth - margin, margin + 40)
 
-      // Page 1: Cover and Overview
-      // Header
-      page1.drawRectangle({
-        x: 0,
-        y: 495,
-        width: 842,
-        height: 100,
-        color: primaryColor,
+      // Add summary section
+      doc.setFontSize(16)
+      doc.setTextColor(9, 143, 143)
+      doc.text("Summary", margin, margin + 70)
+
+      // Summary data
+      doc.setFontSize(12)
+      doc.setTextColor(60, 60, 60)
+
+      const summaryData = [
+        ["Total Contributions", formatCurrency(summaryMetrics.totalAmount)],
+        ["Contributing Members", summaryMetrics.uniqueMembers.toString()],
+        ["Events", summaryMetrics.uniqueEvents.toString()],
+        ["Average Contribution", formatCurrency(summaryMetrics.averageContribution)],
+      ]
+
+      doc.autoTable({
+        startY: margin + 80,
+        head: [["Metric", "Value"]],
+        body: summaryData,
+        theme: "grid",
+        headStyles: {
+          fillColor: [9, 143, 143],
+          textColor: [255, 255, 255],
+        },
+        styles: {
+          cellPadding: 8,
+        },
+        columnStyles: {
+          0: { fontStyle: "bold" },
+        },
       })
 
-      page1.drawText("TITHES & OFFERINGS REPORT", {
-        x: 50,
-        y: 540,
-        size: 28,
-        font: helveticaBold,
-        color: rgb(1, 1, 1),
-      })
-
-      page1.drawText(`${formatDate(dateRange.startDate)} - ${formatDate(dateRange.endDate)}`, {
-        x: 50,
-        y: 510,
-        size: 14,
-        font: helvetica,
-        color: rgb(1, 1, 1),
-      })
-
-      // Summary metrics
-      page1.drawText("SUMMARY", {
-        x: 50,
-        y: 450,
-        size: 18,
-        font: helveticaBold,
-        color: primaryColor,
-      })
-
-      // Total Contributions box
-      page1.drawRectangle({
-        x: 50,
-        y: 350,
-        width: 170,
-        height: 80,
-        color: lightGray,
-        borderColor: primaryColor,
-        borderWidth: 2,
-        borderRadius: 4,
-      })
-
-      page1.drawText("Total Contributions", {
-        x: 70,
-        y: 410,
-        size: 12,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page1.drawText(formatCurrency(summaryMetrics.totalAmount), {
-        x: 70,
-        y: 380,
-        size: 16,
-        font: helveticaBold,
-        color: primaryColor,
-      })
-
-      // Contributing Members box
-      page1.drawRectangle({
-        x: 240,
-        y: 350,
-        width: 170,
-        height: 80,
-        color: lightGray,
-        borderColor: secondaryColor,
-        borderWidth: 2,
-        borderRadius: 4,
-      })
-
-      page1.drawText("Contributing Members", {
-        x: 260,
-        y: 410,
-        size: 12,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page1.drawText(summaryMetrics.uniqueMembers.toString(), {
-        x: 260,
-        y: 380,
-        size: 16,
-        font: helveticaBold,
-        color: secondaryColor,
-      })
-
-      // Events box
-      page1.drawRectangle({
-        x: 430,
-        y: 350,
-        width: 170,
-        height: 80,
-        color: lightGray,
-        borderColor: rgb(0.376, 0.647, 0.98), // #60A5FA
-        borderWidth: 2,
-        borderRadius: 4,
-      })
-
-      page1.drawText("Events", {
-        x: 450,
-        y: 410,
-        size: 12,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page1.drawText(summaryMetrics.uniqueEvents.toString(), {
-        x: 450,
-        y: 380,
-        size: 16,
-        font: helveticaBold,
-        color: rgb(0.376, 0.647, 0.98), // #60A5FA
-      })
-
-      // Average Contribution box
-      page1.drawRectangle({
-        x: 620,
-        y: 350,
-        width: 170,
-        height: 80,
-        color: lightGray,
-        borderColor: rgb(0.961, 0.62, 0.043), // #F59E0B
-        borderWidth: 2,
-        borderRadius: 4,
-      })
-
-      page1.drawText("Average Contribution", {
-        x: 640,
-        y: 410,
-        size: 12,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page1.drawText(formatCurrency(summaryMetrics.averageContribution), {
-        x: 640,
-        y: 380,
-        size: 16,
-        font: helveticaBold,
-        color: rgb(0.961, 0.62, 0.043), // #F59E0B
-      })
-
-      // Convert charts to images
-      let trendChartImage = null
-      let pieChartImage = null
-
-      if (trendChartRef.current) {
-        const trendChartDataUrl = await toPng(trendChartRef.current)
-        const trendChartBytes = await fetch(trendChartDataUrl).then((res) => res.arrayBuffer())
-        trendChartImage = await pdfDoc.embedPng(trendChartBytes)
-      }
-
-      if (pieChartRef.current) {
-        const pieChartDataUrl = await toPng(pieChartRef.current)
-        const pieChartBytes = await fetch(pieChartDataUrl).then((res) => res.arrayBuffer())
-        pieChartImage = await pdfDoc.embedPng(pieChartBytes)
-      }
-
-      // Add charts to page 1
-      if (trendChartImage) {
-        const trendDims = trendChartImage.scale(0.5)
-        page1.drawImage(trendChartImage, {
-          x: 50,
-          y: 50,
-          width: trendDims.width,
-          height: trendDims.height,
-        })
-      }
-
-      if (pieChartImage) {
-        const pieDims = pieChartImage.scale(0.5)
-        page1.drawImage(pieChartImage, {
-          x: 450,
-          y: 50,
-          width: pieDims.width,
-          height: pieDims.height,
-        })
-      }
-
-      // Page 2: Member Summary
-      page2.drawRectangle({
-        x: 0,
-        y: 545,
-        width: 842,
-        height: 50,
-        color: primaryColor,
-      })
-
-      page2.drawText("MEMBER SUMMARY", {
-        x: 50,
-        y: 565,
-        size: 18,
-        font: helveticaBold,
-        color: rgb(1, 1, 1),
-      })
-
-      // Table header
-      page2.drawRectangle({
-        x: 50,
-        y: 525,
-        width: 742,
-        height: 30,
-        color: lightGray,
-      })
-
-      page2.drawText("Member", {
-        x: 60,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page2.drawText("Type", {
-        x: 250,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page2.drawText("Total Contribution", {
-        x: 350,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page2.drawText("# of Contributions", {
-        x: 500,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page2.drawText("Average", {
-        x: 650,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      // Table rows
-      const rowHeight = 25
-      const maxRows = 18
-      const topMembers = memberSummary.slice(0, maxRows)
-
-      topMembers.forEach((item, index) => {
-        const y = 525 - (index + 1) * rowHeight
-
-        // Alternate row background
-        if (index % 2 === 0) {
-          page2.drawRectangle({
-            x: 50,
-            y,
-            width: 742,
-            height: rowHeight,
-            color: rgb(0.97, 0.97, 0.97),
-          })
+      // Try to capture charts as images
+      try {
+        if (trendChartRef.current) {
+          const trendChartDataUrl = await toPng(trendChartRef.current, { quality: 0.95 })
+          doc.addPage()
+          doc.setFontSize(16)
+          doc.setTextColor(9, 143, 143)
+          doc.text("Monthly Contribution Trend", margin, margin + 10)
+          doc.addImage(trendChartDataUrl, "PNG", margin, margin + 20, pageWidth - margin * 2, 200)
         }
+      } catch (chartError) {
+        console.error("Error capturing trend chart:", chartError)
+        // Continue without the chart
+      }
 
-        page2.drawText(`${item.member.first_name} ${item.member.last_name}`, {
-          x: 60,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
+      // Member summary
+      doc.addPage()
+      doc.setFontSize(16)
+      doc.setTextColor(9, 143, 143)
+      doc.text("Member Summary", margin, margin + 10)
 
-        page2.drawText(item.member.type || "-", {
-          x: 250,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
+      // Member table
+      const memberTableData = memberSummary
+        .slice(0, 15)
+        .map((item) => [
+          `${item.member.first_name} ${item.member.last_name}`,
+          item.member.type || "-",
+          formatCurrency(item.totalContribution),
+          item.contributionCount.toString(),
+          formatCurrency(item.averageContribution),
+        ])
 
-        page2.drawText(formatCurrency(item.totalContribution), {
-          x: 350,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
-
-        page2.drawText(item.contributionCount.toString(), {
-          x: 500,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
-
-        page2.drawText(formatCurrency(item.averageContribution), {
-          x: 650,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
+      doc.autoTable({
+        startY: margin + 20,
+        head: [["Member", "Type", "Total Contribution", "# of Contributions", "Average"]],
+        body: memberTableData,
+        theme: "grid",
+        headStyles: {
+          fillColor: [9, 143, 143],
+          textColor: [255, 255, 255],
+        },
+        styles: {
+          overflow: "ellipsize",
+          cellWidth: "wrap",
+        },
       })
 
-      // Page 3: Event Summary
-      page3.drawRectangle({
-        x: 0,
-        y: 545,
-        width: 842,
-        height: 50,
-        color: secondaryColor,
-      })
+      // Event summary
+      doc.addPage()
+      doc.setFontSize(16)
+      doc.setTextColor(9, 143, 143)
+      doc.text("Event Summary", margin, margin + 10)
 
-      page3.drawText("EVENT SUMMARY", {
-        x: 50,
-        y: 565,
-        size: 18,
-        font: helveticaBold,
-        color: rgb(1, 1, 1),
-      })
+      // Event table
+      const eventTableData = eventSummary
+        .slice(0, 15)
+        .map((item) => [
+          item.event.event_type || `Event ${item.event.event_id}`,
+          item.event.start_date ? formatDate(item.event.start_date) : "-",
+          formatCurrency(item.totalContribution),
+          item.contributorCount.toString(),
+          formatCurrency(item.averageContribution),
+        ])
 
-      // Table header
-      page3.drawRectangle({
-        x: 50,
-        y: 525,
-        width: 742,
-        height: 30,
-        color: lightGray,
-      })
-
-      page3.drawText("Event", {
-        x: 60,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page3.drawText("Date", {
-        x: 250,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page3.drawText("Total Contributions", {
-        x: 350,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page3.drawText("# of Contributors", {
-        x: 500,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      page3.drawText("Average Contribution", {
-        x: 650,
-        y: 540,
-        size: 10,
-        font: helveticaBold,
-        color: textColor,
-      })
-
-      // Table rows
-      const topEvents = eventSummary.slice(0, maxRows)
-
-      topEvents.forEach((item, index) => {
-        const y = 525 - (index + 1) * rowHeight
-
-        // Alternate row background
-        if (index % 2 === 0) {
-          page3.drawRectangle({
-            x: 50,
-            y,
-            width: 742,
-            height: rowHeight,
-            color: rgb(0.97, 0.97, 0.97),
-          })
-        }
-
-        page3.drawText(item.event.event_type || `Event ${item.event.event_id}`, {
-          x: 60,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
-
-        page3.drawText(item.event.start_date ? formatDate(item.event.start_date) : "-", {
-          x: 250,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
-
-        page3.drawText(formatCurrency(item.totalContribution), {
-          x: 350,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
-
-        page3.drawText(item.contributorCount.toString(), {
-          x: 500,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
-
-        page3.drawText(formatCurrency(item.averageContribution), {
-          x: 650,
-          y: y + 10,
-          size: 10,
-          font: helvetica,
-          color: textColor,
-        })
+      doc.autoTable({
+        startY: margin + 20,
+        head: [["Event", "Date", "Total Contributions", "# of Contributors", "Average"]],
+        body: eventTableData,
+        theme: "grid",
+        headStyles: {
+          fillColor: [9, 143, 143],
+          textColor: [255, 255, 255],
+        },
+        styles: {
+          overflow: "ellipsize",
+          cellWidth: "wrap",
+        },
       })
 
       // Footer on all pages
-      const pages = [page1, page2, page3]
-      pages.forEach((page, i) => {
-        page.drawText(`Tithes & Offerings Report | ${formatDate(new Date())} | Page ${i + 1} of 3`, {
-          x: 50,
-          y: 20,
-          size: 8,
-          font: helvetica,
-          color: rgb(0.5, 0.5, 0.5),
-        })
-
-        // Church logo/name
-        page.drawText("CHURCH NAME", {
-          x: 700,
-          y: 20,
-          size: 10,
-          font: helveticaBold,
-          color: primaryColor,
-        })
-      })
+      const pageCount = doc.internal.getNumberOfPages()
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i)
+        doc.setFontSize(8)
+        doc.setTextColor(150, 150, 150)
+        doc.text(
+          `Tithes & Offerings Report | ${formatDate(new Date())} | Page ${i} of ${pageCount}`,
+          margin,
+          pageHeight - 20,
+        )
+      }
 
       // Save and download the PDF
-      const pdfBytes = await pdfDoc.save()
-      const blob = new Blob([pdfBytes], { type: "application/pdf" })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement("a")
-      link.href = url
-      link.download = `tithes-report-${format(new Date(), "yyyy-MM-dd")}.pdf`
-      link.click()
+      doc.save(`tithes-report-${format(new Date(), "yyyy-MM-dd")}.pdf`)
     } catch (error) {
       console.error("Error generating PDF:", error)
       alert("There was an error generating the PDF report. Please try again.")
