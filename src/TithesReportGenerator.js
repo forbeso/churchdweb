@@ -303,10 +303,12 @@ const TithesReportGenerator = () => {
     // Group tithes by member
     const memberTithes = {}
     tithesData.forEach((tithe) => {
-      if (!memberTithes[tithe.member_id]) {
-        memberTithes[tithe.member_id] = []
+      // Convert member_id to string to ensure consistent comparison
+      const memberIdKey = String(tithe.member_id)
+      if (!memberTithes[memberIdKey]) {
+        memberTithes[memberIdKey] = []
       }
-      memberTithes[tithe.member_id].push(tithe)
+      memberTithes[memberIdKey].push(tithe)
     })
 
     // Create summary for each member
@@ -316,8 +318,13 @@ const TithesReportGenerator = () => {
         return member.type === memberFilter
       })
       .map((member) => {
-        const memberContributions = memberTithes[member.id] || []
-        const totalContribution = memberContributions.reduce((sum, tithe) => sum + (Number(tithe.amount) || 0), 0)
+        const memberIdKey = String(member.id)
+        const memberContributions = memberTithes[memberIdKey] || []
+        const totalContribution = memberContributions.reduce((sum, tithe) => {
+          // Ensure amount is properly converted to a number
+          const amount = typeof tithe.amount === "string" ? Number.parseFloat(tithe.amount) : Number(tithe.amount)
+          return sum + (isNaN(amount) ? 0 : amount)
+        }, 0)
         const contributionCount = memberContributions.length
         const averageContribution = contributionCount > 0 ? totalContribution / contributionCount : 0
         const lastContribution = memberContributions.length
@@ -1583,7 +1590,7 @@ const TithesReportGenerator = () => {
                     Top Contributors
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {memberSummary.slice(0, 3).map((item, index) => (
+                    {memberSummary.filter((item) => item.totalContribution > 0).slice(0, 3).map((item, index) => (
                       <div key={item.member.id} className="bg-gray-50 p-4 rounded-lg border border-gray-100 relative">
                         <div className="absolute top-3 right-3 bg-[#098F8F] text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
                           {index + 1}
@@ -1871,7 +1878,7 @@ const TithesReportGenerator = () => {
                     ) : (
                       <>
                         <FileText className="w-4 h-4 mr-2" />
-                        <span>Export Beautiful Report</span>
+                        <span>Generate & Save Report</span>
                       </>
                     )}
                   </button>
