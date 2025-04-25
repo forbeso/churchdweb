@@ -27,7 +27,10 @@ import {
   ChevronUp,
   RefreshCw,
   Printer,
+  FileText,
 } from "lucide-react"
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib"
+import { toPng } from "html-to-image"
 
 // Initialize Supabase client
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || ""
@@ -59,6 +62,14 @@ const TithesReportGenerator = () => {
   const [eventFilter, setEventFilter] = useState("all")
   const [expandedMembers, setExpandedMembers] = useState({})
   const [expandedEvents, setExpandedEvents] = useState({})
+  const [pdfGenerating, setPdfGenerating] = useState(false)
+
+  // Refs for chart components
+  const overviewRef = React.useRef(null)
+  const trendChartRef = React.useRef(null)
+  const pieChartRef = React.useRef(null)
+  const memberTableRef = React.useRef(null)
+  const eventTableRef = React.useRef(null)
 
   // Fetch data
   useEffect(() => {
@@ -263,6 +274,503 @@ const TithesReportGenerator = () => {
     return format(parseISO(dateString), "MMM d, yyyy")
   }
 
+  // Generate PDF report
+  const generatePDF = async () => {
+    if (!summaryMetrics) return
+
+    setPdfGenerating(true)
+
+    try {
+      // Create a new PDF document
+      const pdfDoc = await PDFDocument.create()
+
+      // Add pages
+      const page1 = pdfDoc.addPage([842, 595]) // A4 landscape
+      const page2 = pdfDoc.addPage([842, 595])
+      const page3 = pdfDoc.addPage([842, 595])
+
+      // Load fonts
+      const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+      const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
+      const timesRoman = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+
+      // Define colors
+      const primaryColor = rgb(0.035, 0.561, 0.561) // #098F8F
+      const secondaryColor = rgb(0.2, 0.831, 0.6) // #34D399
+      const textColor = rgb(0.2, 0.2, 0.2)
+      const lightGray = rgb(0.9, 0.9, 0.9)
+
+      // Page 1: Cover and Overview
+      // Header
+      page1.drawRectangle({
+        x: 0,
+        y: 495,
+        width: 842,
+        height: 100,
+        color: primaryColor,
+      })
+
+      page1.drawText("TITHES & OFFERINGS REPORT", {
+        x: 50,
+        y: 540,
+        size: 28,
+        font: helveticaBold,
+        color: rgb(1, 1, 1),
+      })
+
+      page1.drawText(`${formatDate(dateRange.startDate)} - ${formatDate(dateRange.endDate)}`, {
+        x: 50,
+        y: 510,
+        size: 14,
+        font: helvetica,
+        color: rgb(1, 1, 1),
+      })
+
+      // Summary metrics
+      page1.drawText("SUMMARY", {
+        x: 50,
+        y: 450,
+        size: 18,
+        font: helveticaBold,
+        color: primaryColor,
+      })
+
+      // Total Contributions box
+      page1.drawRectangle({
+        x: 50,
+        y: 350,
+        width: 170,
+        height: 80,
+        color: lightGray,
+        borderColor: primaryColor,
+        borderWidth: 2,
+        borderRadius: 4,
+      })
+
+      page1.drawText("Total Contributions", {
+        x: 70,
+        y: 410,
+        size: 12,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page1.drawText(formatCurrency(summaryMetrics.totalAmount), {
+        x: 70,
+        y: 380,
+        size: 16,
+        font: helveticaBold,
+        color: primaryColor,
+      })
+
+      // Contributing Members box
+      page1.drawRectangle({
+        x: 240,
+        y: 350,
+        width: 170,
+        height: 80,
+        color: lightGray,
+        borderColor: secondaryColor,
+        borderWidth: 2,
+        borderRadius: 4,
+      })
+
+      page1.drawText("Contributing Members", {
+        x: 260,
+        y: 410,
+        size: 12,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page1.drawText(summaryMetrics.uniqueMembers.toString(), {
+        x: 260,
+        y: 380,
+        size: 16,
+        font: helveticaBold,
+        color: secondaryColor,
+      })
+
+      // Events box
+      page1.drawRectangle({
+        x: 430,
+        y: 350,
+        width: 170,
+        height: 80,
+        color: lightGray,
+        borderColor: rgb(0.376, 0.647, 0.98), // #60A5FA
+        borderWidth: 2,
+        borderRadius: 4,
+      })
+
+      page1.drawText("Events", {
+        x: 450,
+        y: 410,
+        size: 12,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page1.drawText(summaryMetrics.uniqueEvents.toString(), {
+        x: 450,
+        y: 380,
+        size: 16,
+        font: helveticaBold,
+        color: rgb(0.376, 0.647, 0.98), // #60A5FA
+      })
+
+      // Average Contribution box
+      page1.drawRectangle({
+        x: 620,
+        y: 350,
+        width: 170,
+        height: 80,
+        color: lightGray,
+        borderColor: rgb(0.961, 0.62, 0.043), // #F59E0B
+        borderWidth: 2,
+        borderRadius: 4,
+      })
+
+      page1.drawText("Average Contribution", {
+        x: 640,
+        y: 410,
+        size: 12,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page1.drawText(formatCurrency(summaryMetrics.averageContribution), {
+        x: 640,
+        y: 380,
+        size: 16,
+        font: helveticaBold,
+        color: rgb(0.961, 0.62, 0.043), // #F59E0B
+      })
+
+      // Convert charts to images
+      let trendChartImage = null
+      let pieChartImage = null
+
+      if (trendChartRef.current) {
+        const trendChartDataUrl = await toPng(trendChartRef.current)
+        const trendChartBytes = await fetch(trendChartDataUrl).then((res) => res.arrayBuffer())
+        trendChartImage = await pdfDoc.embedPng(trendChartBytes)
+      }
+
+      if (pieChartRef.current) {
+        const pieChartDataUrl = await toPng(pieChartRef.current)
+        const pieChartBytes = await fetch(pieChartDataUrl).then((res) => res.arrayBuffer())
+        pieChartImage = await pdfDoc.embedPng(pieChartBytes)
+      }
+
+      // Add charts to page 1
+      if (trendChartImage) {
+        const trendDims = trendChartImage.scale(0.5)
+        page1.drawImage(trendChartImage, {
+          x: 50,
+          y: 50,
+          width: trendDims.width,
+          height: trendDims.height,
+        })
+      }
+
+      if (pieChartImage) {
+        const pieDims = pieChartImage.scale(0.5)
+        page1.drawImage(pieChartImage, {
+          x: 450,
+          y: 50,
+          width: pieDims.width,
+          height: pieDims.height,
+        })
+      }
+
+      // Page 2: Member Summary
+      page2.drawRectangle({
+        x: 0,
+        y: 545,
+        width: 842,
+        height: 50,
+        color: primaryColor,
+      })
+
+      page2.drawText("MEMBER SUMMARY", {
+        x: 50,
+        y: 565,
+        size: 18,
+        font: helveticaBold,
+        color: rgb(1, 1, 1),
+      })
+
+      // Table header
+      page2.drawRectangle({
+        x: 50,
+        y: 525,
+        width: 742,
+        height: 30,
+        color: lightGray,
+      })
+
+      page2.drawText("Member", {
+        x: 60,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page2.drawText("Type", {
+        x: 250,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page2.drawText("Total Contribution", {
+        x: 350,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page2.drawText("# of Contributions", {
+        x: 500,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page2.drawText("Average", {
+        x: 650,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      // Table rows
+      const rowHeight = 25
+      const maxRows = 18
+      const topMembers = memberSummary.slice(0, maxRows)
+
+      topMembers.forEach((item, index) => {
+        const y = 525 - (index + 1) * rowHeight
+
+        // Alternate row background
+        if (index % 2 === 0) {
+          page2.drawRectangle({
+            x: 50,
+            y,
+            width: 742,
+            height: rowHeight,
+            color: rgb(0.97, 0.97, 0.97),
+          })
+        }
+
+        page2.drawText(`${item.member.first_name} ${item.member.last_name}`, {
+          x: 60,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+
+        page2.drawText(item.member.type || "-", {
+          x: 250,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+
+        page2.drawText(formatCurrency(item.totalContribution), {
+          x: 350,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+
+        page2.drawText(item.contributionCount.toString(), {
+          x: 500,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+
+        page2.drawText(formatCurrency(item.averageContribution), {
+          x: 650,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+      })
+
+      // Page 3: Event Summary
+      page3.drawRectangle({
+        x: 0,
+        y: 545,
+        width: 842,
+        height: 50,
+        color: secondaryColor,
+      })
+
+      page3.drawText("EVENT SUMMARY", {
+        x: 50,
+        y: 565,
+        size: 18,
+        font: helveticaBold,
+        color: rgb(1, 1, 1),
+      })
+
+      // Table header
+      page3.drawRectangle({
+        x: 50,
+        y: 525,
+        width: 742,
+        height: 30,
+        color: lightGray,
+      })
+
+      page3.drawText("Event", {
+        x: 60,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page3.drawText("Date", {
+        x: 250,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page3.drawText("Total Contributions", {
+        x: 350,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page3.drawText("# of Contributors", {
+        x: 500,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      page3.drawText("Average Contribution", {
+        x: 650,
+        y: 540,
+        size: 10,
+        font: helveticaBold,
+        color: textColor,
+      })
+
+      // Table rows
+      const topEvents = eventSummary.slice(0, maxRows)
+
+      topEvents.forEach((item, index) => {
+        const y = 525 - (index + 1) * rowHeight
+
+        // Alternate row background
+        if (index % 2 === 0) {
+          page3.drawRectangle({
+            x: 50,
+            y,
+            width: 742,
+            height: rowHeight,
+            color: rgb(0.97, 0.97, 0.97),
+          })
+        }
+
+        page3.drawText(item.event.event_type || `Event ${item.event.event_id}`, {
+          x: 60,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+
+        page3.drawText(item.event.start_date ? formatDate(item.event.start_date) : "-", {
+          x: 250,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+
+        page3.drawText(formatCurrency(item.totalContribution), {
+          x: 350,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+
+        page3.drawText(item.contributorCount.toString(), {
+          x: 500,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+
+        page3.drawText(formatCurrency(item.averageContribution), {
+          x: 650,
+          y: y + 10,
+          size: 10,
+          font: helvetica,
+          color: textColor,
+        })
+      })
+
+      // Footer on all pages
+      const pages = [page1, page2, page3]
+      pages.forEach((page, i) => {
+        page.drawText(`Tithes & Offerings Report | ${formatDate(new Date())} | Page ${i + 1} of 3`, {
+          x: 50,
+          y: 20,
+          size: 8,
+          font: helvetica,
+          color: rgb(0.5, 0.5, 0.5),
+        })
+
+        // Church logo/name
+        page.drawText("CHURCH NAME", {
+          x: 700,
+          y: 20,
+          size: 10,
+          font: helveticaBold,
+          color: primaryColor,
+        })
+      })
+
+      // Save and download the PDF
+      const pdfBytes = await pdfDoc.save()
+      const blob = new Blob([pdfBytes], { type: "application/pdf" })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
+      link.download = `tithes-report-${format(new Date(), "yyyy-MM-dd")}.pdf`
+      link.click()
+    } catch (error) {
+      console.error("Error generating PDF:", error)
+      alert("There was an error generating the PDF report. Please try again.")
+    } finally {
+      setPdfGenerating(false)
+    }
+  }
+
   // Export data to CSV
   const exportToCSV = (data, filename) => {
     let csvContent = ""
@@ -435,7 +943,7 @@ const TithesReportGenerator = () => {
           </div>
 
           {/* Overview Tab */}
-          <div className={activeTab === "overview" ? "block" : "hidden print:block"}>
+          <div className={activeTab === "overview" ? "block" : "hidden print:block"} ref={overviewRef}>
             {summaryMetrics ? (
               <>
                 {/* Summary Cards */}
@@ -496,7 +1004,7 @@ const TithesReportGenerator = () => {
                 {/* Charts */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                   {/* Monthly Trend Chart */}
-                  <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                  <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm" ref={trendChartRef}>
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Monthly Contribution Trend</h3>
                     <div className="h-80">
                       <ResponsiveContainer width="100%" height="100%">
@@ -531,7 +1039,7 @@ const TithesReportGenerator = () => {
                   </div>
 
                   {/* Top Contributors Pie Chart */}
-                  <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                  <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm" ref={pieChartRef}>
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Top Contributors</h3>
                     <div className="h-80">
                       <ResponsiveContainer width="100%" height="100%">
@@ -594,11 +1102,21 @@ const TithesReportGenerator = () => {
                 {/* Export Options - hidden when printing */}
                 <div className="flex justify-end space-x-4 print:hidden">
                   <button
-                    onClick={() => exportToCSV(tithesData, "all-tithes.csv")}
-                    className="flex items-center px-4 py-2 bg-[#098F8F] text-white rounded-md hover:bg-[#076e6e] transition-colors"
+                    onClick={generatePDF}
+                    disabled={pdfGenerating}
+                    className="flex items-center px-4 py-2 bg-[#098F8F] text-white rounded-md hover:bg-[#076e6e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Download className="w-4 h-4 mr-2" />
-                    <span>Export All Data</span>
+                    {pdfGenerating ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+                        <span>Generating PDF...</span>
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="w-4 h-4 mr-2" />
+                        <span>Export Beautiful Report</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </>
@@ -610,7 +1128,7 @@ const TithesReportGenerator = () => {
           </div>
 
           {/* Member Summary Tab */}
-          <div className={activeTab === "members" ? "block" : "hidden print:block print:mt-8"}>
+          <div className={activeTab === "members" ? "block" : "hidden print:block print:mt-8"} ref={memberTableRef}>
             {/* Member Filter - hidden when printing */}
             <div className="flex justify-between items-center mb-6 print:hidden">
               <div className="flex items-center space-x-2">
@@ -817,7 +1335,7 @@ const TithesReportGenerator = () => {
           </div>
 
           {/* Event Summary Tab */}
-          <div className={activeTab === "events" ? "block" : "hidden print:block print:mt-8"}>
+          <div className={activeTab === "events" ? "block" : "hidden print:block print:mt-8"} ref={eventTableRef}>
             {/* Event Filter - hidden when printing */}
             <div className="flex justify-between items-center mb-6 print:hidden">
               <div className="flex items-center space-x-2">
