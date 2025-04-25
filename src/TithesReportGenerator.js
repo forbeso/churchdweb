@@ -64,6 +64,7 @@ const TithesReportGenerator = () => {
   const [expandedMembers, setExpandedMembers] = useState({})
   const [expandedEvents, setExpandedEvents] = useState({})
   const [pdfGenerating, setPdfGenerating] = useState(false)
+  const [pdfError, setPdfError] = useState('')
 
   // Refs for chart components
   const overviewRef = React.useRef(null)
@@ -432,7 +433,8 @@ const TithesReportGenerator = () => {
       doc.save(`tithes-report-${format(new Date(), "yyyy-MM-dd")}.pdf`)
     } catch (error) {
       console.error("Error generating PDF:", error)
-      alert("There was an error generating the PDF report. Please try again.")
+      setPdfError(error)
+      alert("There was an error generating the PDF report. Please try again...", error)
     } finally {
       setPdfGenerating(false)
     }
@@ -782,6 +784,7 @@ const TithesReportGenerator = () => {
                       <>
                         <FileText className="w-4 h-4 mr-2" />
                         <span>Export Beautiful Report</span>
+                        
                       </>
                     )}
                   </button>
