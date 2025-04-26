@@ -1261,13 +1261,13 @@ export default function TithesOfferings() {
                             <div className="flex justify-between mb-4">
                               <Badge
                                 variant={member.type === "Member" ? "default" : "outline"}
-                                className={member.type === "Member" ? "bg-[#098F8F] hover:bg-[#076e6e]" : ""}
+                                className={member.type === "Member" ? "bg-[#098F8F] hover:bg-[#076e6e] text-white" : ""}
                               >
-                                {member.type}
+                                {member.type || 'not assigned'}
                               </Badge>
                               <Badge
                                 variant={member.status === "Active" ? "default" : "outline"}
-                                className={member.status === "Active" ? "bg-green-600 hover:bg-green-700" : ""}
+                                className={member.status === "Active" ? "bg-green-600 hover:bg-green-700 text-white" : ""}
                               >
                                 {member.status}
                               </Badge>

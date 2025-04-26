@@ -352,6 +352,8 @@ const TithesReportGenerator = () => {
       .sort((a, b) => b.totalContribution - a.totalContribution)
   }, [tithesData, membersData, memberFilter])
 
+
+
   // Calculate event summary
   const eventSummary = useMemo(() => {
     if (!tithesData.length || !eventsData.length) return []
