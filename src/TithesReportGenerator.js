@@ -447,6 +447,7 @@ const TithesReportGenerator = () => {
   const formatPercentage = (value) => {
     return `${value > 0 ? "+" : ""}${value.toFixed(1)}%`
   }
+  
 
   // Generate PDF report
   const generatePDF = async () => {

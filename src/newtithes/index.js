@@ -705,7 +705,7 @@ export default function TithesOfferings() {
 
         // Calculate summary data
         const totalTithes = tithesData?.reduce((sum, item) => sum + (Number(item.amount) || 0), 0) || 0
-        const totalOfferings = 2000 // This is hardcoded in the original code
+        const totalOfferings = 0 // This is hardcoded in the original code
 
         setSummaryData({
           totalTithes,
