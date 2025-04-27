@@ -766,12 +766,13 @@ export default function TithesOfferings() {
       // Collect all valid new tithe entries
       Object.values(newTithes).forEach((tithe) => {
         // Only save entries that have required fields and amount > 0
-        if (tithe.member_id && tithe.event_id && tithe.date_paid && tithe.amount && Number(tithe.amount) > 0) {
+        if (tithe.member_id && tithe.event_id && tithe.date_paid && tithe.amount && Number(tithe.amount) > 0 && tithe.type) {
           tithesToSave.push({
             member_id: tithe.member_id,
             event_id: tithe.event_id,
             date_paid: tithe.date_paid,
             amount: Number(tithe.amount),
+            type: tithe.type,
             notes: tithe.notes || "",
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
@@ -988,7 +989,7 @@ export default function TithesOfferings() {
   const saveEditedTithe = async () => {
     try {
       // Validate required fields
-      if (!editingTithe.member_id || !editingTithe.event_id || !editingTithe.date_paid || !editingTithe.amount) {
+      if (!editingTithe.member_id || !editingTithe.event_id || !editingTithe.date_paid || !editingTithe.amount || !editingTithe.type) {
         alert("Please fill in all required fields")
         return
       }
@@ -1002,6 +1003,7 @@ export default function TithesOfferings() {
           amount: Number(editingTithe.amount),
           notes: editingTithe.notes || "",
           updated_at: new Date().toISOString(),
+          type: editingTithe.type
         })
         .eq("id", editingTithe.id)
 
@@ -1231,6 +1233,7 @@ export default function TithesOfferings() {
                         amount: "",
                         event_id: "",
                         notes: "",
+                        type:''
                       }
 
                       return (
@@ -1349,6 +1352,25 @@ export default function TithesOfferings() {
                                     onChange={(e) => handleTitheChange(member.id, "amount", e.target.value)}
                                   />
                                 </div>
+                              </div>
+                              <div className="grid grid-cols-1 gap-2">
+                              <label className="text-sm font-medium text-gray-700">Payment Type</label>
+                              <div className="relative">
+                              <Select
+                                  value={newTithe.type || ""}
+                                  onValueChange={(value) => handleTitheChange(member.id, "type", value)}
+                                  className="border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
+                                >
+                                  <option value="">Select payment type</option>
+                                  <option value="Tithe">Tithe</option>
+                                  <option value="Offering">Offering</option>
+                                  <option value="Special Offering">Special Offering</option>
+                                  <option value="Seed Faith">Seed Faith</option>
+                                  <option value="Benevolent Offering">Benevolent Offering</option>
+                                  <option value="First Fruit">First Fruit</option>
+                                  
+                                </Select>
+                              </div>
                               </div>
 
                               {/* Notes */}
@@ -1493,6 +1515,16 @@ export default function TithesOfferings() {
                                     value={editingTithe.amount || ""}
                                     onChange={(e) => handleEditTitheChange("amount", e.target.value)}
                                   />
+                                   <Select
+                                  value={editingTithe.type || ""}
+                                  onValueChange={(value) => handleEditTitheChange("type", value)}
+                                  className="border-gray-300 focus:border-[#098F8F] focus:ring-[#098F8F]"
+                                >
+                                  <option value="">Select payment type</option>
+                                  <option value="Tithe">Tithe</option>
+                                  <option value="Offering">Offering</option>
+                                  
+                                </Select>
                                 </div>
                               </td>
                               <td className="px-6 py-4">

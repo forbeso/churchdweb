@@ -490,7 +490,7 @@ const TithesReportGenerator = () => {
       // Add organization name (placeholder)
       doc.setFontSize(14)
       doc.setTextColor(100, 100, 100)
-      doc.text("Your Organization Name", margin, 210)
+      doc.text("Abundant Life Ministry", margin, 210)
 
       // Add report generation date
       doc.setFontSize(12)
@@ -506,7 +506,7 @@ const TithesReportGenerator = () => {
       doc.roundedRect(pageWidth - margin - 150, 180, 120, 60, 5, 5, "F")
       doc.setFontSize(12)
       doc.setTextColor(150, 150, 150)
-      doc.text("Organization Logo", pageWidth - margin - 115, 215)
+      doc.text("Church Logo", pageWidth - margin - 115, 215)
 
       // Add page number
       addPageNumber(1, "___") // Will be replaced later
