@@ -1368,6 +1368,7 @@ export default function TithesOfferings() {
                                   <option value="Seed Faith">Seed Faith</option>
                                   <option value="Benevolent Offering">Benevolent Offering</option>
                                   <option value="First Fruit">First Fruit</option>
+                                  <option value="Building Fund">Building Fund</option>
                                   
                                 </Select>
                               </div>

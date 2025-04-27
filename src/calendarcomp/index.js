@@ -99,9 +99,11 @@ export default function CalendarChooseDate({ eventTypes }) {
     ]);
 
     if (error) {
-      console.error('Error adding event:', error);
+      //console.error('Error adding event:', error);
+      alert('Error adding event.')
     } else {
-      console.log('Event added successfully:', data);
+      //console.log('Event added successfully:', data);
+      alert('Event added successfully.')
     }
 
     setEventTitle('');
