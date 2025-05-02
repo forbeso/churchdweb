@@ -699,13 +699,18 @@ export default function TithesOfferings() {
             amount: "",
             event_id: "",
             notes: "",
+            type:''
           }
         })
         setNewTithes(initialNewTithes)
 
         // Calculate summary data
-        const totalTithes = tithesData?.reduce((sum, item) => sum + (Number(item.amount) || 0), 0) || 0
-        const totalOfferings = 0 // This is hardcoded in the original code
+        const totalTithes = tithesData?.reduce((sum, item) => {
+          return item.type === 'Tithe' ? sum + (Number(item.amount) || 0) : sum;
+          }, 0) || 0;
+          const totalOfferings = tithesData?.reduce((sum, item) => {
+            return item.type === 'Offering' ? sum + (Number(item.amount) || 0) : sum;
+            }, 0) || 0;
 
         setSummaryData({
           totalTithes,
@@ -798,6 +803,7 @@ export default function TithesOfferings() {
             amount: "",
             event_id: "",
             notes: "",
+            type:""
           }
         })
         setNewTithes(resetNewTithes)
@@ -819,7 +825,9 @@ export default function TithesOfferings() {
           setMemberTithes(tithesGrouped)
 
           // Update summary data
-          const totalTithes = refreshedTithes?.reduce((sum, item) => sum + (Number(item.amount) || 0), 0) || 0
+          const totalTithes = refreshedTithes?.reduce((sum, item) => {
+            return item.type === 'Tithe' ? sum + (Number(item.amount) || 0) : sum;
+            }, 0) || 0;
           setSummaryData((prev) => ({
             ...prev,
             totalTithes,
@@ -1081,6 +1089,7 @@ export default function TithesOfferings() {
         setSummaryData((prev) => ({
           ...prev,
           totalTithes,
+          totalOfferings,
           totalCollected: totalTithes + prev.totalOfferings,
         }))
       }
