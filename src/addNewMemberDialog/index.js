@@ -381,7 +381,7 @@ export default function AddNewMemberDialog({
             />
 
             <p
-              className="text-right underline cursor-pointer text-sm"
+              className="text-right underline cursor-pointer text-md bg-blue-400 text-white"
               onClick={() => setSeeMoreFormFields(!seeMoreFormFields)}
             >
               Add more details.
