@@ -178,11 +178,12 @@ const TithesReportGenerator = () => {
   // Calculate summary metrics
   const summaryMetrics = useMemo(() => {
     if (!tithesData.length) return null
-
+ 
     const totalAmount = tithesData.reduce((sum, tithe) => sum + (Number(tithe.amount) || 0), 0)
     const uniqueMembers = new Set(tithesData.map((tithe) => tithe.member_id)).size
     const uniqueEvents = new Set(tithesData.map((tithe) => tithe.event_id)).size
     const averageContribution = totalAmount / tithesData.length
+
 
     // Previous period metrics for comparison
     const previousTotalAmount = previousPeriodData.reduce((sum, tithe) => sum + (Number(tithe.amount) || 0), 0)
